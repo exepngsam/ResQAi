@@ -3,26 +3,60 @@ const StatCard = ({
   value,
   sublabel,
   icon: Icon,
-  variant = "default"
+  variant = "default",
+  trend,
+  className = ""
 }) => {
-  const variantStyles = {
-    default: "border-command-border text-slate-100 hover:border-slate-500",
-    critical: "border-red-500/40 bg-red-950/20 text-red-400 shadow-red-950/20",
-    warning: "border-amber-500/40 bg-amber-950/20 text-amber-400 shadow-amber-950/20",
-    safe: "border-emerald-500/40 bg-emerald-950/20 text-emerald-400 shadow-emerald-950/20",
-    intel: "border-cyan-500/40 bg-cyan-950/20 text-cyan-400 shadow-cyan-950/20"
+  const variantBorder = {
+    default: "border-white/[0.08] hover:border-white/20",
+    critical: "border-red-500/30 bg-red-500/[0.03]",
+    warning: "border-orange-500/30 bg-orange-500/[0.03]",
+    moderate: "border-amber-500/30 bg-amber-500/[0.03]",
+    safe: "border-emerald-500/30 bg-emerald-500/[0.03]",
+    intel: "border-white/20 bg-white/[0.02]"
   };
-  const iconColors = {
-    default: "text-slate-400 bg-slate-800/60",
-    critical: "text-red-400 bg-red-900/40",
-    warning: "text-amber-400 bg-amber-900/40",
-    safe: "text-emerald-400 bg-emerald-900/40",
-    intel: "text-cyan-400 bg-cyan-900/40"
+
+  const iconStyles = {
+    default: "text-secondary bg-white/[0.04] border border-white/10",
+    critical: "text-red-400 bg-red-500/10 border border-red-500/20",
+    warning: "text-orange-400 bg-orange-500/10 border border-orange-500/20",
+    moderate: "text-amber-400 bg-amber-500/10 border border-amber-500/20",
+    safe: "text-emerald-400 bg-emerald-500/10 border border-emerald-500/20",
+    intel: "text-white bg-white/10 border border-white/20"
   };
-  return <div
-    className={`p-4 rounded-xl bg-command-card border transition-all duration-200 shadow-lg ${variantStyles[variant]} flex items-center justify-between`}
-  ><div><div className="text-[11px] font-mono uppercase tracking-wider text-slate-400 font-medium">{label}</div><div className="text-2xl font-mono font-bold mt-1 tracking-tight text-white">{value}</div>{sublabel && <div className="text-[11px] text-slate-400 font-mono mt-0.5">{sublabel}</div>}</div><div className={`w-11 h-11 rounded-lg flex items-center justify-center ${iconColors[variant]}`}><Icon className="w-5 h-5" /></div></div>;
+
+  return (
+    <div
+      className={`liquid-glass p-3.5 md:p-4 rounded-xl border transition-all duration-300 hover:translate-y-[-1px] ${
+        variantBorder[variant] || variantBorder.default
+      } flex items-center justify-between gap-3 ${className}`}
+    >
+      <div className="min-w-0 flex-1">
+        <div className="text-[10px] md:text-[11px] font-mono uppercase tracking-wider text-muted font-medium truncate">
+          {label}
+        </div>
+        <div className="text-xl md:text-2xl font-bold font-mono tracking-tight text-white mt-0.5 truncate">
+          {value}
+        </div>
+        {(sublabel || trend) && (
+          <div className="text-[10px] md:text-[11px] text-secondary font-mono mt-0.5 flex items-center gap-1.5 truncate">
+            {sublabel}
+            {trend && <span className="text-emerald-400 font-semibold">{trend}</span>}
+          </div>
+        )}
+      </div>
+
+      {Icon && (
+        <div
+          className={`w-9 h-9 md:w-10 md:h-10 rounded-lg flex items-center justify-center shrink-0 transition-transform duration-300 ${
+            iconStyles[variant] || iconStyles.default
+          }`}
+        >
+          <Icon className="w-4 h-4 md:w-5 md:h-5" />
+        </div>
+      )}
+    </div>
+  );
 };
-export {
-  StatCard
-};
+
+export { StatCard };

@@ -1,11 +1,33 @@
 import { useState, useEffect } from "react";
-import { ShieldAlert, Activity, Clock } from "lucide-react";
+import {
+  ShieldAlert,
+  Activity,
+  Clock,
+  Bell,
+  Menu,
+  X,
+  User,
+  Radio,
+  Map,
+  AlertTriangle,
+  Send,
+  Boxes,
+  BarChart3,
+  Bot,
+  Play
+} from "lucide-react";
 
 const Navbar = ({
   disaster,
   activeSimulationStep = 0,
-  simulationRunning = false
+  simulationRunning = false,
+  currentTab = "dashboard",
+  onTabChange,
+  onOpenAlerts,
+  unreadAlertsCount = 3,
+  onOpenIntro
 }) => {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [timeMode, setTimeMode] = useState(() => {
     try {
       return localStorage.getItem("disasteriq_time_mode") || "local_24";
@@ -51,7 +73,6 @@ const Navbar = ({
           second: "2-digit"
         });
       } else {
-        // Default local_24: Real-time 24-hour matching user's system clock
         timeFormatted = `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
       }
 
@@ -79,76 +100,171 @@ const Navbar = ({
     }
   };
 
-  return (
-    <header className="h-16 bg-command-panel border-b border-command-border px-4 md:px-6 flex items-center justify-between select-none z-40 sticky top-0">
-      {/* Brand & Platform Title */}
-      <div className="flex items-center gap-3">
-        <div className="w-9 h-9 bg-red-950/80 border border-red-500/80 rounded-lg flex items-center justify-center text-red-500 shadow-lg shadow-red-900/30">
-          <ShieldAlert className="w-5 h-5 animate-pulse" />
-        </div>
-        <div>
-          <div className="flex items-center gap-2">
-            <span className="font-extrabold tracking-wider text-base text-white">
-              DISASTER<span className="text-red-500">IQ</span>
-            </span>
-            <span className="hidden sm:inline-block text-[10px] font-mono uppercase px-2 py-0.5 rounded bg-blue-950/80 border border-blue-500/50 text-blue-400">
-              AI Command Center
-            </span>
-          </div>
-          <div className="text-[10px] text-slate-400 font-mono tracking-tight hidden sm:block">
-            "From disaster data to intelligent action."
-          </div>
-        </div>
-      </div>
+  const navItems = [
+    { id: "dashboard", label: "Command Center" },
+    { id: "map", label: "Live Map" },
+    { id: "incidents", label: "Incidents" },
+    { id: "missions", label: "Missions" },
+    { id: "resources", label: "Resources" },
+    { id: "analytics", label: "Analytics" }
+  ];
 
-      {/* Center: Disaster Active Status Badge */}
-      {disaster && (
-        <div className="hidden lg:flex items-center gap-2 bg-command-bg/90 border border-command-border px-3 py-1 rounded-full text-xs font-mono">
-          <span className="flex h-2 w-2 relative">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75" />
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500" />
-          </span>
-          <span className="font-bold text-red-400">{disaster.type}</span>
-          <span className="text-slate-600">|</span>
-          <span className="text-slate-300">{disaster.location.split(",")[0]}</span>
-          <span className="text-slate-600">|</span>
-          <span className="px-1.5 py-0.5 rounded bg-red-950/80 text-red-400 text-[10px] font-bold border border-red-500/40">
-            {disaster.severity}
-          </span>
+  return (
+    <>
+      <header className="h-16 bg-[#050505]/90 backdrop-blur-md border-b border-white/[0.08] px-4 md:px-8 flex items-center justify-between select-none z-40 sticky top-0 font-sans">
+        {/* LEFT: RESQAI Logo + System Online */}
+        <div className="flex items-center gap-4">
+          <div
+            onClick={() => onTabChange && onTabChange("dashboard")}
+            className="flex items-center gap-2.5 cursor-pointer group"
+          >
+            <div className="w-8 h-8 rounded-lg bg-red-600/90 border border-red-500/80 flex items-center justify-center text-white shadow-lg shadow-red-950/50 group-hover:scale-105 transition-transform duration-200">
+              <ShieldAlert className="w-4 h-4" />
+            </div>
+            <div className="flex items-center gap-1.5">
+              <span className="font-extrabold tracking-tighter text-base text-white">
+                RESQ<span className="text-red-500">AI</span>
+              </span>
+            </div>
+          </div>
+
+          <div className="hidden sm:flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-white/[0.03] border border-white/10 text-[10px] font-mono text-secondary">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            <span>SYSTEM ONLINE</span>
+          </div>
+        </div>
+
+        {/* CENTER: Primary Navigation Links (Desktop) */}
+        <nav className="hidden lg:flex items-center gap-1 bg-white/[0.02] border border-white/[0.06] p-1 rounded-lg">
+          {navItems.map((item) => {
+            const isActive = currentTab === item.id;
+            return (
+              <button
+                key={item.id}
+                type="button"
+                onClick={() => onTabChange && onTabChange(item.id)}
+                className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all duration-200 cursor-pointer ${
+                  isActive
+                    ? "bg-white text-black shadow-sm font-semibold"
+                    : "text-secondary hover:text-white hover:bg-white/[0.04]"
+                }`}
+              >
+                {item.label}
+              </button>
+            );
+          })}
+        </nav>
+
+        {/* RIGHT: Status, Alerts, Time, Commander */}
+        <div className="flex items-center gap-3">
+          {/* Simulation Active pill if running */}
+          {simulationRunning && (
+            <div className="hidden xl:flex items-center gap-1.5 px-2.5 py-1 rounded bg-amber-500/10 border border-amber-500/30 text-amber-400 text-[11px] font-mono">
+              <Activity className="w-3.5 h-3.5 animate-spin" />
+              <span>SIMULATION ACTIVE ({activeSimulationStep}/7)</span>
+            </div>
+          )}
+
+          {/* Live Indicator */}
+          <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[11px] font-mono font-bold tracking-wider">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
+            <span>LIVE</span>
+          </div>
+
+          {/* Real-time Clock Toggle Button */}
+          <button
+            type="button"
+            onClick={toggleTimeMode}
+            title={`Real-time Clock: ${timeData.date} • Click to toggle (Local 24h / Local 12h / UTC)`}
+            className="hidden sm:flex items-center gap-2 text-white bg-white/[0.03] hover:bg-white/[0.06] border border-white/[0.08] hover:border-white/20 px-2.5 py-1.5 rounded-lg transition-all cursor-pointer select-none font-mono"
+          >
+            <Clock className="w-3.5 h-3.5 text-secondary" />
+            <span className="font-bold tracking-wider text-xs">{timeData.time}</span>
+            <span className="text-[9px] px-1 py-0.2 rounded bg-white/10 text-white uppercase font-semibold">
+              {timeData.tz}
+            </span>
+          </button>
+
+          {/* Alerts Center Trigger */}
+          <button
+            type="button"
+            onClick={onOpenAlerts}
+            title="Live Alert Center"
+            className="relative p-2 rounded-lg bg-white/[0.03] hover:bg-white/[0.07] border border-white/[0.08] text-secondary hover:text-white transition-colors cursor-pointer"
+          >
+            <Bell className="w-4 h-4" />
+            {unreadAlertsCount > 0 && (
+              <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-red-500 text-white text-[9px] font-mono font-bold flex items-center justify-center border border-[#050505] animate-pulse">
+                {unreadAlertsCount}
+              </span>
+            )}
+          </button>
+
+          {/* Commander Profile Trigger */}
+          <button
+            type="button"
+            onClick={() => onTabChange && onTabChange("settings")}
+            title="Commander Settings & Profile"
+            className="flex items-center gap-2 p-1.5 pl-2 pr-2.5 rounded-lg bg-white/[0.03] hover:bg-white/[0.07] border border-white/[0.08] text-secondary hover:text-white transition-colors cursor-pointer text-xs font-mono"
+          >
+            <div className="w-5 h-5 rounded-full bg-white/10 flex items-center justify-center text-white">
+              <User className="w-3 h-3" />
+            </div>
+            <span className="hidden md:inline font-medium">CMD. SHARMA</span>
+          </button>
+
+          {/* Mobile Hamburger with Animated Menu -> X Transition (Requirement #11) */}
+          <button
+            type="button"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="lg:hidden p-2 rounded-lg bg-white/[0.03] border border-white/[0.08] text-white transition-transform duration-500 cursor-pointer"
+          >
+            <div className={`transition-all duration-500 transform ${mobileMenuOpen ? "rotate-180 scale-90" : "rotate-0 scale-100"}`}>
+              {mobileMenuOpen ? <X className="w-5 h-5 text-red-400" /> : <Menu className="w-5 h-5" />}
+            </div>
+          </button>
+        </div>
+      </header>
+
+      {/* Mobile Drawer Navigation */}
+      {mobileMenuOpen && (
+        <div className="lg:hidden fixed inset-x-0 top-16 z-30 bg-[#08080a] border-b border-white/10 p-4 shadow-2xl space-y-2 animate-fade-in font-sans">
+          <div className="grid grid-cols-2 gap-2 pb-3 border-b border-white/[0.06]">
+            {navItems.map((item) => (
+              <button
+                key={item.id}
+                type="button"
+                onClick={() => {
+                  if (onTabChange) onTabChange(item.id);
+                  setMobileMenuOpen(false);
+                }}
+                className={`p-2.5 rounded-lg text-xs font-medium text-left transition-all ${
+                  currentTab === item.id
+                    ? "bg-white text-black font-bold"
+                    : "bg-white/[0.02] text-secondary hover:text-white"
+                }`}
+              >
+                {item.label}
+              </button>
+            ))}
+          </div>
+
+          <div className="flex items-center justify-between pt-1 text-[11px] font-mono text-muted">
+            <span>CLOCK: {timeData.time} ({timeData.tz})</span>
+            <button
+              type="button"
+              onClick={() => {
+                if (onOpenIntro) onOpenIntro();
+                setMobileMenuOpen(false);
+              }}
+              className="text-white hover:underline"
+            >
+              Replay Intro
+            </button>
+          </div>
         </div>
       )}
-
-      {/* Right Controls: Telemetry, Simulation Status, Time */}
-      <div className="flex items-center gap-4 text-xs font-mono">
-        {/* Simulation Indicator */}
-        {simulationRunning && (
-          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded bg-amber-950/70 border border-amber-500/50 text-amber-300">
-            <Activity className="w-3.5 h-3.5 animate-spin" />
-            <span className="font-bold">SIMULATION ACTIVE (STEP {activeSimulationStep}/7)</span>
-          </div>
-        )}
-
-        {/* Live Pulse Beacon */}
-        <div className="flex items-center gap-1.5 text-emerald-400 bg-emerald-950/40 border border-emerald-500/30 px-2.5 py-1 rounded">
-          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-          <span className="font-bold tracking-wider">LIVE</span>
-        </div>
-
-        {/* Real-time Digital Clock Badge */}
-        <button
-          type="button"
-          onClick={toggleTimeMode}
-          title={`Real-time Clock: ${timeData.date} • Click to toggle (Local 24h / Local 12h / UTC)`}
-          className="hidden sm:flex items-center gap-2 text-slate-200 bg-command-bg hover:bg-slate-800/80 border border-command-border hover:border-cyan-500/50 px-2.5 py-1 rounded transition-all cursor-pointer select-none group"
-        >
-          <Clock className="w-3.5 h-3.5 text-cyan-400 group-hover:text-cyan-300 transition-colors" />
-          <span className="font-bold tracking-wider text-slate-100">{timeData.time}</span>
-          <span className="text-[9px] px-1.5 py-0.5 rounded bg-cyan-950/80 text-cyan-400 border border-cyan-500/40 uppercase font-semibold">
-            {timeData.tz}
-          </span>
-        </button>
-      </div>
-    </header>
+    </>
   );
 };
 

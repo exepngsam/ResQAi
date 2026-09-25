@@ -23,6 +23,10 @@ const api = {
         blocked_roads_count: 1,
         zones: fallbackData.zones,
         recent_incidents: fallbackData.incidents,
+        rescue_teams: fallbackData.rescue_teams || [],
+        shelters: fallbackData.shelters || [],
+        hospitals: fallbackData.hospitals || [],
+        ambulances: fallbackData.ambulances || [],
         active_missions: [
           {
             id: "MIS-801",
