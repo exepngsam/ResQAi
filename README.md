@@ -1,219 +1,283 @@
-# 🌉 MOSTAR — Cinematic Scroll Experience & Engine
+# 🚨 ResQAI (DisasterIQ) — Autonomous Multi-Source Disaster Intelligence & Tactical Mission Control Platform
 
 <p align="center">
-  <img src="assets/hero-animated.svg" alt="Mostar City Cinematic Scroll Experience" width="100%" />
+  <img src="assets/hero-animated.svg" alt="ResQAI Disaster Intelligence Platform" width="100%" />
 </p>
 
 <p align="center">
-  <a href="#-quick-start"><img src="https://img.shields.io/badge/Status-Production%20Ready-0284c7?style=for-the-badge&logo=rocket" alt="Status" /></a>
-  <a href="#-cinematic-scroll-choreography"><img src="https://img.shields.io/badge/Engine-60%20FPS%20GPU%20Lerp-10b981?style=for-the-badge&logo=speedtest" alt="Engine" /></a>
-  <a href="#-mathematical-animation-pipeline"><img src="https://img.shields.io/badge/Architecture-Vanilla%20HTML%20%2F%20CSS%20%2F%20JS-f59e0b?style=for-the-badge&logo=javascript" alt="Architecture" /></a>
-  <a href="#-multi-layer-depth-stack"><img src="https://img.shields.io/badge/Layers-7%20Parallax%20Rig-8b5cf6?style=for-the-badge&logo=layers" alt="Layers" /></a>
-  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT%20%2F%20Apache-blue?style=for-the-badge" alt="License" /></a>
+  <a href="#-quick-start"><img src="https://img.shields.io/badge/System-Production%20Ready-0284c7?style=for-the-badge&logo=rocket" alt="Status" /></a>
+  <a href="#-system-architecture"><img src="https://img.shields.io/badge/Backend-FastAPI%20%7C%20Python%203.11+-38bdf8?style=for-the-badge&logo=python" alt="Backend" /></a>
+  <a href="#-command-center-frontend"><img src="https://img.shields.io/badge/Frontend-React%2018%20%7C%20Vite%20%7C%20JS-10b981?style=for-the-badge&logo=react" alt="Frontend" /></a>
+  <a href="#-heuristic-risk--xai-engine"><img src="https://img.shields.io/badge/AI-Explainable%20Risk%20%26%20Vision-f59e0b?style=for-the-badge&logo=speedtest" alt="AI" /></a>
+  <a href="#-human-in-the-loop-hitl-guarantee"><img src="https://img.shields.io/badge/Safety-Human--in--the--Loop%20(HITL)-ef4444?style=for-the-badge&logo=shield" alt="HITL" /></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-Apache%202.0-8b5cf6?style=for-the-badge" alt="License" /></a>
 </p>
 
 ---
 
-## 📖 Executive Overview
+## 📌 Executive Overview & Problem Statement
 
-**MOSTAR** is a high-fidelity, single-stage cinematic scroll journey through the historic UNESCO landmark of **Mostar, Bosnia and Herzegovina**.
+During catastrophic disasters (such as cyclones, urban inundations, and coastal flash floods), emergency management authorities face severe **information fragmentation**. Raw sensor readings, synthetic aperture radar (SAR) satellite passes, aerial drone reconnaissance feeds, and frantic civilian emergency calls arrive across disconnected silos. Field dispatchers lack:
 
-Built entirely in **vanilla web standards** (zero build step, zero heavy frameworks, zero runtime dependencies), it transforms **$3700\text{px}$ of scrubbable viewport scroll** into a living spatial film. Using a custom **Hermite smoothstep interpolation engine**, **7-layer multiplane parallax rig**, and a **tri-set circular buffer infinite slider**, every frame is computed and bound directly to CSS custom properties with zero layout thrashing.
+1. **Holistic Situational Awareness**: No unified spatial view integrating flood depth, road cutoffs, and hospital capacity.
+2. **Explainable Triage (XAI)**: Inability to quickly prioritize which isolated civilian clusters require immediate life-saving extraction.
+3. **Safe Dynamic Routing**: Convoys get delayed or trapped by submerged culverts and impassable highway choke points.
+
+### The Solution: ResQAI (DisasterIQ)
+**ResQAI** is an enterprise-grade, SIH-ready, operational decision-support intelligence platform that fuses multi-source telemetry to automate detection, assess infrastructure damage, compute explainable risk scores, optimize safe water/road transit routes, allocate response units, and generate official situation reports.
 
 ---
 
-## 🎬 Cinematic Scroll Choreography
+## 🛡️ Human-in-the-Loop (HITL) Guarantee
 
-The composition is pinned to a sticky $100\text{vh}$ stage while the user scrubs through a $3700\text{px}$ travel volume across four synchronized acts:
+> **CRITICAL DECISION-SUPPORT GUARANTEE:**
+> ResQAI strictly operates as a decision-support system. High-impact emergency actions (dispatching rescue boats, hospital evacuations, zone cordon-offs) require explicit **Human-in-the-Loop** commander authorization (`[APPROVE]` / `[REJECT]`). AI recommendations are paired with transparent heuristic rationales, contributing factor breakdowns, and verified emergency operating procedure (NDMA/NDRF) citations.
+
+---
+
+## 🏗️ System Architecture
+
+<p align="center">
+  <img src="assets/workflow-animated.svg" alt="ResQAI End-to-End Operational Pipeline" width="100%" />
+</p>
 
 ```mermaid
-journey
-    title 3700px Scrub Dynamics & Scene Transitions
-    section Act I: The Gateway (0 - 650px)
-      Hero Title Rises (-210px): 5: Cinematic Engine
-      Intro Copy & Tags Sink (+90px): 5: Compositor
-      Sky & Parallax Drift Active: 5: Telemetry
-    section Act II: Stari Most (560 - 1620px)
-      Bridge Arch Expands (67vw -> 105vw): 5: Transformer
-      Splitframes Part (±46vw): 5: Transformer
-      River Closeup & UNESCO Facts Fade In: 5: Shading
-    section Act III: The Old Bazaar (1760 - 2700px)
-      Bazaar Saturation Boost (+18%): 5: Color Engine
-      Bridge Clears Viewport (-760px): 5: Motion
-      Bazaar Panel & Action Pill Active: 5: Interactive
-    section Act IV: Sights Slider (2760 - 3700px)
-      Slider Enters from 420vw: 5: Sights Rig
-      Screen-True Inverse Counter-Scale: 5: Math Core
-      Controls Active & Infinite Loop Ready: 5: Controller
+flowchart TD
+    subgraph S1["1. Multi-Source Telemetry Ingestion"]
+        A1["🛰️ SAR Satellite Passes (Sentinel-1)"]
+        A2["🚁 Aerial Recon Drones (4K Feeds)"]
+        A3["🌊 CCTV & IoT River Gauges"]
+        A4["📱 Citizen Emergency SOS Portal"]
+    end
+
+    subgraph S2["2. Intelligence & AI Core (FastAPI)"]
+        B1["👁️ Drone Vision Victim Triage (YOLO)"]
+        B2["📐 Spatial Heuristic Risk Engine"]
+        B3["🧭 Dijkstra Safe Pathfinding & Canal Routing"]
+        B4["🚤 Dynamic Resource Allocator"]
+        B5["🤖 DisasterIQ Copilot (RAG + SOPs)"]
+    end
+
+    subgraph S3["3. State & Event Bus"]
+        C1["💾 In-Memory PostGIS Store (Thread-Safe)"]
+        C2["⚡ WebSocket Event Broadcast Hub"]
+    end
+
+    subgraph S4["4. Tactical Command Center"]
+        D1["🗺️ Live Tactical GIS Map (Leaflet Dark Matter)"]
+        D2["🚨 Priority Incident Board (P1-P4)"]
+        D3["🛡️ Commander HITL Approval Modal"]
+        D4["📱 Field Responder Mobile HUD"]
+        D5["📑 Automated ICS-201 Situation Reports"]
+    end
+
+    A1 --> S2
+    A2 --> S2
+    A3 --> S2
+    A4 --> S2
+    S2 --> C1
+    C1 --> C2
+    C2 --> D1
+    C2 --> D2
+    C2 --> D3
+    C2 --> D4
+    C2 --> D5
+    D3 -.->|"Authorized Directives"| C1
 ```
 
-| Act | Scroll Range | Visual Narrative | Mathematical & Transform State |
-|:---:|:---:|---|---|
-| **I** | `0px – 650px` | **The Emerald River Gateway**<br>The grand `MOSTAR` title sits atop the stone arch. Intro highlights float gently above the turquoise waters of the Neretva. | • `--title-y`: `0px → -210px`<br>• `--title-scale`: `1.0 → 0.92`<br>• `--intro-copy-y`: `0px → +90px`<br>• `--title-opacity`: `1.0 → 0.0` |
-| **II** | `560px – 1620px` | **Stari Most Compass**<br>The iconic stone bridge widens to embrace the screen. Splitframe rocks part symmetrically to unveil the emerald river close-up and UNESCO inscription milestones ($1566$ / $2005$). | • `--bridge-width`: `67.2vw → 105vw`<br>• `--bridge-bottom`: `5vh → -8vh`<br>• `--split-drift`: $\pm 46\text{vw}$ ($enter^{1.5}$)<br>• Global blur: `0px → 14px`<br>• Shade tint: $\text{rgba}(74, 181, 224, \alpha)$ |
-| **III** | `1760px – 2700px` | **The Bazaar Keeps Mostar Close**<br>The bridge launches upward into the sky, transitioning to the vibrant Old Town bazaar street. Copper stalls and minarets come into razor-sharp focus. | • `--bazaar-saturation`: `1.0 → 1.18`<br>• `--panel3-opacity`: `0.0 → 1.0`<br>• `--panel3-y`: $+58\text{px} \rightarrow -86\text{px}$ slide<br>• Interactive `↗ Open old town notes` pill |
-| **IV** | `2760px – 3700px` | **Infinite Sights Expedition**<br>A card carousel flies in from `420vw` along the X-axis. Round navigation buttons emerge as pointer interactions unlock. | • `--sights-enter-x`: `420vw → 0vw`<br>• `--sights-scale`: $1 / \text{backScale}$ (Screen-True)<br>• Controls opacity: $0 \rightarrow 1$ (Enabled at $> 0.98$)<br>• 15-card circular buffer navigation |
-
----
-
-## ⚙️ Workflow Model & Animation Pipeline
-
-<p align="center">
-  <img src="assets/workflow-animated.svg" alt="Cinematic Scroll Workflow Architecture" width="100%" />
-</p>
-
-The rendering cycle operates on a decoupled **telemetry-to-compositor pipeline** to guarantee **60 FPS fluid playback**:
-
-```
-[ Passive Event Ingestion ] ──> [ Inertia Smoothing (Lerp) ] ──> [ Piecewise Segment Resolver ] ──> [ Direct CSS Matrix Injection ]
-  • window.scroll                 • smoothScroll (t = 0.14)         • smoothstep(e0, e1, s)            • --bridge-width, --back-scale
-  • pointermove                   • mouseX/Y (t = 0.12)             • segmentInOut(a, b, c, d)         • Zero Reflow / GPU Composite
-```
-
-### 1. Inertial Interpolation & Dampening
-Raw window scroll events and mouse coordinates are decoupled from the render loop via linear interpolation ($\text{lerp}$):
-
-$$\text{smoothScroll}_{t+1} = \text{lerp}(\text{smoothScroll}_t, \text{targetScroll}, 0.14)$$
-
-$$\mu_{t+1} = \text{lerp}(\mu_t, \text{targetPointer}, 0.12)$$
-
-*Convergence threshold*: When $|\text{smoothScroll} - \text{targetScroll}| < 0.08\text{px}$, values snap to avoid micro-jitter and idle rAF waste.
-
-### 2. Hermite Smoothstep Curves
-Segment boundaries use cubic Hermite polynomials for first-derivative continuity ($C^1$ smooth starts and endings without sudden velocity spikes):
-
-$$S(x) = 3x^2 - 2x^3 \quad \text{where} \quad x = \text{clamp}\left(\frac{v - e_0}{e_1 - e_0}, 0, 1\right)$$
-
-### 3. Screen-True Counter-Scaling Equation
-The sights slider resides inside the `.back-stack`, which dynamically zooms under `--back-scale` ($0.76 \rightarrow 1.30$). To prevent the sight cards from ballooning or shrinking unpredictably on screen, the engine computes an inverse counter-scale:
-
-$$\text{Scale}_{\text{sights}} = \frac{1}{\text{backScale}} \implies \text{Effective Screen Scale} \equiv 1.000$$
-
-$$\text{Top}_{\text{parent}} = H_{\text{screen}} - \frac{H_{\text{screen}} - \text{Top}_{\text{screen}}}{\text{backScale}}$$
-
-This ensures the sight cards maintain constant physical dimensions and pixel-crisp typography regardless of background zoom depth!
-
----
-
-## 🔄 Tri-Set Infinite Slider Circular Buffer
-
-<p align="center">
-  <img src="assets/slider-architecture.svg" alt="Tri-Set Slider Architecture Diagram" width="100%" />
-</p>
-
-To provide a seamless, non-exhausting carousel without edge deadlocks, the slider mounts **3 identical sets of cards** ($3 \times 5 = 15$ cards):
+### Incident-to-Dispatch Lifecycle
 
 ```mermaid
-stateDiagram-v2
-    direction LR
-    [*] --> Set1_Active: Initialized at index = 5
-    Set1_Active --> Set2_Overflow: User clicks Next (Index 5..9 -> 10+)
-    Set2_Overflow --> Set1_Active: transitionend -> jump(activeSight - 5)
-    Set1_Active --> Set0_Underflow: User clicks Prev (Index 5..9 -> <5)
-    Set0_Underflow --> Set1_Active: transitionend -> jump(activeSight + 5)
-```
+sequenceDiagram
+    autonumber
+    actor Sensor as Ingestion Sensors / Drone
+    participant AI as ResQAI Intelligence Core
+    participant Hub as State Store and WebSocket Hub
+    actor Commander as Tactical Commander
+    actor Responder as Field Rescue Unit (Boat)
 
-1. **Active Starting Domain (`Set 1`)**: Indices `5..9`. The initial view displays Card #5 (`Stari Most`).
-2. **Smooth Sliding (`640ms cubic-bezier(0.22, 1, 0.36, 1)`)**:
-   $$\Delta X = -\left(\text{CardWidth} + \text{Gap}\right) \times \text{activeSight}$$
-3. **Double-rAF Instant Jump Normalization**:
-   When the transition finishes on either outer set:
-   - Add `.is-jumping` (disables CSS transition).
-   - Normalize index: $\text{activeSight} \gets \text{activeSight} \pm 5$.
-   - Apply updated translation.
-   - Use two nested `requestAnimationFrame()` passes before removing `.is-jumping`, completely masking the repositioning from the human eye.
-
----
-
-## 🏛️ Multi-Layer Depth Stack
-
-Source order defines the GPU paint order across identical z-indices:
-
-```
-main.site-shell
-└─ section.cinema-scroll#cinema (Height: calc(100vh + 3700px))
-   └─ div.stage (position: sticky; top: 0; 100vh)
-      ├─ div.world
-      │  ├─ [z=0]  img.sky-img                      (Farthest sky background)
-      │  ├─ [z=10] header.site-header                (Logo, Nav links, EN switcher)
-      │  ├─ [z=1]  div.back-stack                   (Parallax container: scale 0.76 -> 1.30)
-      │  │  ├─ [z=1] img.back-four                   (Atmospheric glow layer)
-      │  │  ├─ [z=2] section.sights-slider           (15-card tri-set track)
-      │  │  └─ [z=3] img.back-bazaar                 (Old Town copper quarter)
-      │  ├─ [z=5]  div.sights-controls               (Round ← and → buttons)
-      │  ├─ [z=3]  h1.hero-title                     (MOSTAR display serif)
-      │  ├─ [z=6]  img.splitframe-left / right      (Symmetric parting cliffs)
-      │  ├─ [z=4]  img.bridge-img                    (Stari Most stone arch)
-      │  ├─ [z=5]  img.frame-two-img                 (High-res river closeup)
-      │  └─ [z=2]  div.shade                         (Dynamic 3-stop tint gradient)
-      ├─ [z=9]  section.intro-copy                   (Intro narrative & 3 highlight pills)
-      ├─ [z=10] section.story-panel-bridge           (Compass story & facts 1566 / 2005)
-      └─ [z=10] section.story-panel-bazaar           (Bazaar story & action button)
+    Sensor->>AI: Telemetry: Zone-07 flood depth 3.4m, 14 trapped
+    AI->>AI: Evaluate Risk Score (88/100 - CRITICAL)
+    AI->>AI: Dijkstra computes safe route (Canal R-18)
+    AI->>Hub: Stage Mission Recommendation (SQUAD-04)
+    Hub->>Commander: Push HITL Approval Alert on Command HUD
+    Commander->>Hub: Sign and APPROVE MISSION (Auth ID: CMD-8821)
+    Hub->>Responder: Dispatch Route and GPS Waypoints to Mobile HUD
+    Responder->>Hub: Tap ARRIVED and RESCUED (14/14)
+    Hub->>Commander: Update GIS Live State & Generate ICS-201 Report
 ```
 
 ---
 
-## 🚀 Quick Start
-
-### Option A: Zero-Dependency Standalone Run
-Because all fonts and scene assets load directly from authorized CDNs, no build tools or package managers are required.
-
-```bash
-# 1. Clone the repository
-git clone https://github.com/exepngsam/ResQAi.git
-cd ResQAi
-
-# 2. Open directly in your browser
-start index.html       # Windows
-open index.html        # macOS
-xdg-open index.html    # Linux
-```
-
-### Option B: Local HTTP Server (Python / Node)
-```bash
-# Via Python
-python -m http.server 3000
-
-# Via Node.js
-npx serve .
-```
-Navigate to `http://localhost:3000` to experience the 60 FPS scroll.
-
----
-
-## ♿ Accessibility & Reduced Motion
-
-The implementation adheres to strict accessibility standards:
-- **`prefers-reduced-motion: reduce`**:
-  - Automatically disables inertia lerping and forces instantaneous scroll sync.
-  - Locks pointer parallax (`--mx` and `--my` pinned to `0`).
-  - Removes CSS transitions for instant, motion-sick-free navigation.
-- **Full Keyboard Navigation**:
-  - `Tab` navigation through all sight cards.
-  - `Enter` or `Space` selects and focuses any card.
-  - Aria labels on all interactive controls (`aria-label="Open Stari Most card"`, `aria-label="Slider controls"`).
-
----
-
-## 📂 Project Structure
-
-```
-├── index.html               # Semantic, standalone Mostar story DOM
-├── styles.css               # Exact CSS custom properties & layout matrix
-├── script.js                # 60 FPS animation engine & infinite slider
-├── assets/
-│   ├── hero-animated.svg    # Animated SVG hero banner
-│   ├── workflow-animated.svg# Animated workflow pipeline diagram
-│   └── slider-architecture.svg # Infinite slider buffer diagram
-├── index.resqai.html        # DisasterIQ Emergency Command Center interface
-├── backend/                 # Disaster response FastAPI microservices
-├── src/                     # React / Leaflet telemetry modules
-└── README.md                # Comprehensive documentation
-```
-
----
+## 🧠 Core AI Engines & Mathematical Formulations
 
 <p align="center">
-  Crafted with precision for <b>Mostar, Bosnia and Herzegovina</b> 🇧🇦<br>
-  <sub>Architected with Vanilla Web Standards · 60 FPS Hardware Composited</sub>
+  <img src="assets/slider-architecture.svg" alt="ResQAI Risk & Decision Architecture" width="100%" />
 </p>
+
+### 1. Spatial Heuristic Risk & Hazard Engine (XAI)
+Every geographic sector receives a dynamic, explainable risk score ($0–100$) calculated continuously from physical telemetry:
+
+$$\text{Risk Score} = 0.30 \cdot \text{PopRisk} + 0.25 \cdot \text{FloodDepth} + 0.20 \cdot \text{RoadCutoff} + 0.15 \cdot \text{VictimDensity} + 0.10 \cdot \text{HospitalDistance}$$
+
+| Risk Tier | Score Range | Operational Meaning | Recommended Protocol |
+| :---: | :---: | :--- | :--- |
+| **LOW** | `0 – 25` | Normal baseline monitoring | Routine automated sensory telemetry sweeps |
+| **MODERATE** | `26 – 50` | Rising river levels / low water pooling | Pre-stage rescue crafts at nearby staging hubs |
+| **HIGH** | `51 – 75` | Severe inundation & access cutoffs | Mobilize NDRF / SDRF units for rapid deployment |
+| **CRITICAL** | `76 – 100` | Imminent life threat / submerged structures | Immediate tactical air/boat extraction mission |
+
+### 2. Flood-Aware Safe Pathfinding & Watercraft Routing
+The routing engine applies a modified **Dijkstra algorithm** on a directed road and canal graph $G = (V, E)$. When floodwaters submerge roads ($> 0.5\text{m}$), highway edges are penalized with infinite travel weight, automatically pivoting dispatchers to navigable inland water corridors (e.g., Canal Corridor R-18) for motorized Zodiac boats.
+
+### 3. Aerial Drone Computer Vision & Victim Detection
+Trained on aerial flood reconnaissance footage, the computer vision subsystem (`vision_engine.py`) detects trapped civilians on building rooftops, partially submerged vehicles, and tree canopies with confidence metrics and bounding coordinates.
+
+### 4. DisasterIQ Copilot (Conversational RAG)
+An operational AI copilot backed by retrieval-augmented generation (RAG) referencing official **NDMA (National Disaster Management Authority)** and **NDRF** Standard Operating Procedures (SOPs). Responders can query:
+> *"Which sector requires priority watercraft dispatch and what is the protocol for stranded pediatric patients?"*
+The copilot queries active GIS telemetry and cites NDMA SOP Section 4.2.
+
+### 5. Deterministic 7-Stage Disaster Simulation
+A built-in deterministic simulator modeling the **Mahanadi Delta Catastrophic Inundation** across 8 high-risk coastal zones in Odisha. It includes playback controls ($\times 1, \times 2, \times 5$), step-by-step water surges, bridge collapses, and incident triggers.
+
+---
+
+## 💻 Command Center Frontend Modules
+
+The ResQAI Tactical Command Center provides 11 dedicated operational interfaces built with React 18, modern JavaScript (ESM/JSX), Tailwind CSS, and Leaflet GIS:
+
+| View | Route | Operational Function |
+| :--- | :---: | :--- |
+| **Command Dashboard** | `/dashboard` | High-level situational statistics, active incidents, casualty counts, and weather radar. |
+| **Live GIS Tactical Map** | `/map` | Interactive dark-matter GIS map with flood polygons, sensor telemetry, and live units. |
+| **Incident Triage Board** | `/incidents` | Categorized P1–P4 queue of emergency alerts with explainable risk breakdown. |
+| **Mission Dispatch** | `/missions` | AI-recommended rescue missions featuring the Commander HITL Approval Modal. |
+| **Mobile Responder HUD** | `/mobile-response` | High-contrast, single-tap mobile interface for boat crews (`ACCEPT`, `ARRIVED`, `RESOLVED`). |
+| **Disaster Simulator** | `/simulation` | Interactive timeline simulator for training and hackathon live demonstrations. |
+| **DisasterIQ Copilot** | `/copilot` | Natural language operational assistant with SOP retrieval and tool invocation. |
+| **Analytics & Trends** | `/analytics` | Historical telemetry analysis, water level charts, and response latency graphs. |
+| **Situation Reports** | `/reports` | Exportable, official ICS-201 emergency situation reports for state relief commissioners. |
+| **Resource Inventory** | `/resources` | Fleet tracking for rescue boats, ambulances, medical helicopters, and shelter beds. |
+| **Citizen Emergency SOS** | `/citizen-report` | Public emergency intake portal allowing stranded civilians to report SOS coordinates. |
+
+---
+
+## ⚡ Technology Stack
+
+### Backend Core
+- **Framework**: Python 3.11+, FastAPI (Async REST & WebSocket endpoints)
+- **Validation**: Pydantic v2 schemas
+- **Spatial Processing**: In-Memory spatial graph & PostGIS compatibility
+- **Server**: Uvicorn ASGI
+
+### Frontend Tactical Command HUD
+- **Core**: React 18, Modern JavaScript (ESM / JSX)
+- **Build Tool**: Vite 5
+- **Styling**: Tailwind CSS, Custom Cyber-Dark Design System
+- **Mapping**: Leaflet GIS, CartoDB Dark Matter tiles, GeoJSON overlays
+- **Icons**: Lucide React
+
+### Experimental Submodules
+- **Cinematic Visualizer**: Standalone spatial telemetry engine (`index.html`, `styles.css`, `script.js`) featuring 60 FPS Hermite smoothstep interpolation and 7-layer parallax choreography.
+
+---
+
+## 📂 Repository Structure
+
+```
+ResQAI/
+├── assets/                       # Animated high-resolution SVG diagrams
+│   ├── hero-animated.svg         # Tactical radar & command banner
+│   ├── workflow-animated.svg     # End-to-end data pipeline architecture
+│   └── slider-architecture.svg   # Risk formula & HITL decision matrix
+├── backend/                      # FastAPI Python backend
+│   ├── app/
+│   │   ├── api/routers/          # Analytics, Auth, Citizen, Copilot, Incidents, Missions, etc.
+│   │   ├── database/             # Thread-safe in-memory store loaded from demo datasets
+│   │   ├── models/               # Pydantic v2 schemas
+│   │   ├── services/             # Risk engine, route optimizer, allocator, RAG, simulator
+│   │   └── main.py               # FastAPI entrypoint & WebSocket hub
+│   └── requirements.txt
+├── src/                          # React + Vite Tactical Command Center (Pure JavaScript JSX/ESM)
+│   ├── components/               # Map, Navbar, Sidebar, StatCards, ApprovalModal, SimulationBar
+│   ├── pages/                    # 11 operational views (Dashboard, Map, Missions, HUD, etc.)
+│   ├── services/                 # API client and WebSocket subscription handlers
+│   ├── utils/                    # Map configuration and coordinate helpers
+│   ├── App.jsx                   # Main layout and route controller
+│   └── main.jsx                  # React application entry point
+├── data/
+│   └── demo/                     # Deterministic Odisha flood scenario dataset (odisha_flood.json)
+├── docs/                         # API and architecture references
+├── infrastructure/               # Dockerfiles & container configs
+├── docker-compose.yml            # Multi-container orchestration
+├── index.resqai.html             # Command Center HTML entry point
+├── index.html                    # Standalone Spatial Telemetry & Cinematic Visualizer
+├── package.json
+└── vite.config.js
+```
+
+---
+
+## 🚀 Quick Start Guide
+
+### Option A: Standard Local Development
+
+#### 1. Backend Setup (FastAPI)
+```bash
+# Navigate to repository root and create virtual environment
+python -m venv .venv
+
+# Activate virtual environment
+# Windows:
+.venv\Scripts\activate
+# Linux/macOS:
+source .venv/bin/activate
+
+# Install backend dependencies
+pip install -r backend/requirements.txt
+
+# Start FastAPI server on port 8000
+python -m uvicorn backend.app.main:app --port 8000 --reload
+```
+API Documentation will be live at: `http://localhost:8000/docs`
+
+#### 2. Frontend Setup (React + Vite)
+```bash
+# In a new terminal window:
+npm install
+
+# Start Vite dev server
+npm run dev
+```
+Open `http://localhost:5173` to access the Tactical Command Center.
+
+---
+
+### Option B: Docker Compose
+
+Launch the complete containerized stack with a single command:
+
+```bash
+docker compose up --build
+```
+- **Tactical Command HUD**: `http://localhost:5173`
+- **FastAPI Interactive Docs**: `http://localhost:8000/docs`
+
+---
+
+## ⏱️ 3-Minute Hackathon Demo Script
+
+1. **Situational Awareness (`/dashboard`)**: Observe live statistics across the Mahanadi delta ($295,300$ affected civilians, 8 critical flood sectors).
+2. **Start Simulation (`/simulation`)**: Click **START SIMULATION** ($\times 2$ speed) to watch river gauges rise, roads submerge, and P1 alerts trigger.
+3. **Inspect Zone 07 (`/map`)**: Click Zone 07 on the GIS map to review real-time flood depth ($3.4\text{m}$) and the 14 civilians stranded on a rooftop.
+4. **Consult Copilot (`/copilot`)**: Ask: *"Which sector requires priority watercraft dispatch?"* Copilot parses telemetry and cites NDMA SOP Section 4.2.
+5. **Human-in-the-Loop Approval (`/missions`)**: Review AI recommendation deploying **RESCUE-04** via canal route **R-18**. Click **[APPROVE MISSION]**.
+6. **Mobile Field Responder HUD (`/mobile-response`)**: Switch to the field HUD view, tap **ARRIVED**, and resolve the mission to safely extract the 14 victims.
+7. **Automated SitRep (`/reports`)**: Generate an exportable ICS-201 emergency situation report ready for state disaster officials.
+
+---
+
+## 📄 License
+
+Distributed under the **Apache 2.0 License**. See [LICENSE](LICENSE) for details.

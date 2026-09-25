@@ -1,223 +1,231 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 420" width="100%" height="100%">
   <defs>
-    <!-- Background Linear Gradients -->
-    <linearGradient id="skyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#0a151f" />
-      <stop offset="40%" stop-color="#142c3d" />
-      <stop offset="70%" stop-color="#0e1d24" />
-      <stop offset="100%" stop-color="#060b0d" />
+    <!-- Background Gradients -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#050a14" />
+      <stop offset="40%" stop-color="#0a172a" />
+      <stop offset="75%" stop-color="#081422" />
+      <stop offset="100%" stop-color="#03070d" />
     </linearGradient>
 
-    <!-- Emerald River Gradient -->
-    <linearGradient id="emeraldGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#147d7c">
-        <animate attributeName="stop-color" values="#147d7c; #21a396; #0f5c5b; #147d7c" dur="8s" repeatCount="indefinite" />
-      </stop>
-      <stop offset="50%" stop-color="#38bdf8">
-        <animate attributeName="stop-color" values="#38bdf8; #4ade80; #38bdf8" dur="8s" repeatCount="indefinite" />
-      </stop>
-      <stop offset="100%" stop-color="#147d7c">
-        <animate attributeName="stop-color" values="#147d7c; #21a396; #0f5c5b; #147d7c" dur="8s" repeatCount="indefinite" />
-      </stop>
-    </linearGradient>
-
-    <!-- Warm Stone Gradient -->
-    <linearGradient id="stoneGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#fdf1e1" />
-      <stop offset="100%" stop-color="#d4bda2" />
-    </linearGradient>
-
-    <!-- Cyber Gold Glow -->
-    <radialGradient id="glowPulse" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.35">
-        <animate attributeName="stop-opacity" values="0.35;0.15;0.35" dur="4s" repeatCount="indefinite" />
-      </stop>
-      <stop offset="60%" stop-color="#0284c7" stop-opacity="0.1">
-        <animate attributeName="stop-opacity" values="0.1;0.03;0.1" dur="4s" repeatCount="indefinite" />
-      </stop>
-      <stop offset="100%" stop-color="#0284c7" stop-opacity="0" />
+    <!-- Tactical Radar Gradient -->
+    <radialGradient id="radarSweepGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#00f0ff" stop-opacity="0.35" />
+      <stop offset="45%" stop-color="#0284c7" stop-opacity="0.12" />
+      <stop offset="100%" stop-color="#000000" stop-opacity="0" />
     </radialGradient>
 
-    <!-- Filter for luminous glow -->
-    <filter id="neonGlow" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur stdDeviation="6" result="blur" />
+    <!-- Neon Glow Filters -->
+    <filter id="glowCyan" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="5" result="blur" />
       <feMerge>
         <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+
+    <filter id="glowRed" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feMerge>
         <feMergeNode in="blur" />
         <feMergeNode in="SourceGraphic" />
       </feMerge>
     </filter>
 
     <filter id="cardShadow" x="-10%" y="-10%" width="120%" height="130%">
-      <feDropShadow dx="0" dy="14" stdDeviation="18" flood-color="#000000" flood-opacity="0.55" />
+      <feDropShadow dx="0" dy="10" stdDeviation="14" flood-color="#000000" flood-opacity="0.75" />
     </filter>
 
-    <!-- Keyframe Animations -->
+    <!-- Linear Accents -->
+    <linearGradient id="accentCyan" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#38bdf8" />
+      <stop offset="50%" stop-color="#00f0ff" />
+      <stop offset="100%" stop-color="#3b82f6" />
+    </linearGradient>
+
+    <linearGradient id="accentCrimson" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#ef4444" />
+      <stop offset="100%" stop-color="#f97316" />
+    </linearGradient>
+
+    <!-- Keyframe Styles -->
     <style>
-      @keyframes floatSlow {
-        0%, 100% { transform: translateY(0px) rotate(0deg); }
-        50% { transform: translateY(-7px) rotate(0.4deg); }
+      @keyframes radarRotate {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
       }
-      @keyframes shimmerLine {
-        0% { transform: translateX(-1200px); }
-        100% { transform: translateX(1200px); }
+      @keyframes pulseBeacon {
+        0%, 100% { transform: scale(1); opacity: 0.9; }
+        50% { transform: scale(1.35); opacity: 0.3; }
       }
-      @keyframes pulseGlow {
-        0%, 100% { opacity: 0.45; }
-        50% { opacity: 0.85; }
+      @keyframes waveStream {
+        0% { stroke-dashoffset: 240; }
+        100% { stroke-dashoffset: 0; }
       }
-      @keyframes archPulse {
-        0%, 100% { stroke-dashoffset: 0; }
-        50% { stroke-dashoffset: 24; }
+      @keyframes blinkFast {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.25; }
       }
-      @keyframes beamScan {
-        0% { transform: translateY(-20px); opacity: 0; }
-        50% { opacity: 0.7; }
-        100% { transform: translateY(420px); opacity: 0; }
+      @keyframes floatCard {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-5px); }
       }
-      @keyframes badgeRotate {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
+      .radar-scanner {
+        transform-origin: 600px 180px;
+        animation: radarRotate 9s linear infinite;
       }
-      .floating { animation: floatSlow 6s ease-in-out infinite; }
-      .glowing { animation: pulseGlow 3.5s ease-in-out infinite; }
-      .arch-line { stroke-dasharray: 8 6; animation: archPulse 20s linear infinite; }
-      .laser-beam { animation: beamScan 5s ease-in-out infinite; }
+      .beacon-ring-1 {
+        transform-origin: 220px 140px;
+        animation: pulseBeacon 2.6s ease-out infinite;
+      }
+      .beacon-ring-2 {
+        transform-origin: 980px 160px;
+        animation: pulseBeacon 3.2s ease-out infinite 0.8s;
+      }
+      .data-stream {
+        stroke-dasharray: 8 6;
+        animation: waveStream 6s linear infinite;
+      }
+      .status-dot {
+        animation: blinkFast 1.4s ease-in-out infinite;
+      }
+      .floating-pill {
+        animation: floatCard 4s ease-in-out infinite;
+      }
     </style>
   </defs>
 
-  <!-- Deep Atmosphere Background -->
-  <rect width="1200" height="420" rx="20" fill="url(#skyGrad)" />
+  <!-- Canvas Background -->
+  <rect width="1200" height="420" rx="18" fill="url(#bgGrad)" />
+  <rect width="1200" height="420" rx="18" fill="none" stroke="#1e3a5f" stroke-width="1.5" stroke-opacity="0.6" />
 
-  <!-- Ambient Glow Orb -->
-  <circle cx="600" cy="210" r="280" fill="url(#glowPulse)" />
+  <!-- Tactical Grid Lines -->
+  <g stroke="#0f2b48" stroke-width="1" stroke-opacity="0.35">
+    <line x1="80" y1="0" x2="80" y2="420" />
+    <line x1="240" y1="0" x2="240" y2="420" />
+    <line x1="400" y1="0" x2="400" y2="420" />
+    <line x1="600" y1="0" x2="600" y2="420" />
+    <line x1="800" y1="0" x2="800" y2="420" />
+    <line x1="960" y1="0" x2="960" y2="420" />
+    <line x1="1120" y1="0" x2="1120" y2="420" />
 
-  <!-- Geometric Grid Matrix overlay (subtle cinematic backdrop) -->
-  <g opacity="0.12" stroke="#38bdf8" stroke-width="0.75">
-    <line x1="100" y1="0" x2="100" y2="420" stroke-dasharray="3 7" />
-    <line x1="250" y1="0" x2="250" y2="420" stroke-dasharray="3 7" />
-    <line x1="400" y1="0" x2="400" y2="420" stroke-dasharray="3 7" />
-    <line x1="600" y1="0" x2="600" y2="420" stroke-dasharray="3 7" />
-    <line x1="800" y1="0" x2="800" y2="420" stroke-dasharray="3 7" />
-    <line x1="950" y1="0" x2="950" y2="420" stroke-dasharray="3 7" />
-    <line x1="1100" y1="0" x2="1100" y2="420" stroke-dasharray="3 7" />
+    <line x1="0" y1="70" x2="1200" y2="70" />
+    <line x1="0" y1="140" x2="1200" y2="140" />
+    <line x1="0" y1="210" x2="1200" y2="210" />
+    <line x1="0" y1="280" x2="1200" y2="280" />
+    <line x1="0" y1="350" x2="1200" y2="350" />
+  </g>
+
+  <!-- Central Tactical Radar Concentric Circles -->
+  <g stroke="#00f0ff" stroke-opacity="0.18" fill="none">
+    <circle cx="600" cy="180" r="80" stroke-width="1" />
+    <circle cx="600" cy="180" r="140" stroke-width="1" stroke-dasharray="4 4" />
+    <circle cx="600" cy="180" r="200" stroke-width="1.2" />
+    <circle cx="600" cy="180" r="260" stroke-width="1" stroke-dasharray="6 8" />
+  </g>
+
+  <!-- Rotating Radar Sweep Cone -->
+  <g class="radar-scanner">
+    <path d="M 600 180 L 860 180 A 260 260 0 0 0 810 50 Z" fill="url(#radarSweepGrad)" />
+    <line x1="600" y1="180" x2="860" y2="180" stroke="#00f0ff" stroke-width="1.8" filter="url(#glowCyan)" />
+  </g>
+
+  <!-- Geo-Coordinate Arc Lines -->
+  <path d="M 120 280 Q 600 60 1080 280" fill="none" stroke="#0284c7" stroke-width="1.5" stroke-opacity="0.45" class="data-stream" />
+  <path d="M 160 300 Q 600 110 1040 300" fill="none" stroke="#ef4444" stroke-width="1" stroke-opacity="0.4" stroke-dasharray="4 6" />
+
+  <!-- Emergency Beacon Nodes -->
+  <!-- Left Beacon (Zone 07 High Hazard) -->
+  <g>
+    <circle class="beacon-ring-1" cx="220" cy="140" r="28" fill="none" stroke="#ef4444" stroke-width="1.5" />
+    <circle cx="220" cy="140" r="8" fill="#ef4444" filter="url(#glowRed)" />
+    <circle cx="220" cy="140" r="3" fill="#ffffff" />
+    <text x="236" y="136" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="700" fill="#f87171" letter-spacing="1">CRITICAL ZONE 07</text>
+    <text x="236" y="150" font-family="monospace" font-size="10" fill="#94a3b8">DEPTH: 3.4M | 14 TRAPPED</text>
+  </g>
+
+  <!-- Right Beacon (Rescue Drone Squad) -->
+  <g>
+    <circle class="beacon-ring-2" cx="980" cy="160" r="24" fill="none" stroke="#10b981" stroke-width="1.5" />
+    <circle cx="980" cy="160" r="8" fill="#10b981" filter="url(#glowCyan)" />
+    <circle cx="980" cy="160" r="3" fill="#ffffff" />
+    <text x="830" y="156" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="700" fill="#34d399" letter-spacing="1" text-anchor="start">SQUAD RESCUE-04</text>
+    <text x="830" y="170" font-family="monospace" font-size="10" fill="#94a3b8" text-anchor="start">EN ROUTE VIA CANAL R-18</text>
+  </g>
+
+  <!-- Header Telemetry Bar -->
+  <g transform="translate(40, 28)">
+    <!-- Live Status Pill -->
+    <rect x="0" y="0" width="190" height="28" rx="14" fill="#0f1f33" stroke="#0284c7" stroke-width="1" />
+    <circle class="status-dot" cx="16" cy="14" r="5" fill="#10b981" />
+    <text x="28" y="18" font-family="monospace" font-size="11" font-weight="700" fill="#38bdf8" letter-spacing="1.2">SYSTEM LIVE: ACTIVE</text>
+
+    <!-- Location & Telemetry Telemetry -->
+    <rect x="206" y="0" width="310" height="28" rx="14" fill="#0f1f33" stroke="#1e3a5f" stroke-width="1" />
+    <text x="220" y="18" font-family="monospace" font-size="11" fill="#94a3b8">LAT 20.35°N · LON 86.10°E · MAHANADI</text>
+
+    <!-- Defense / Protocol Badge -->
+    <rect x="910" y="0" width="250" height="28" rx="14" fill="#1c1214" stroke="#ef4444" stroke-width="1" />
+    <circle class="status-dot" cx="924" cy="14" r="4.5" fill="#ef4444" />
+    <text x="936" y="18" font-family="monospace" font-size="11" font-weight="700" fill="#f87171" letter-spacing="1">DEFCON-1 DISASTER LEVEL</text>
+  </g>
+
+  <!-- Central Title Display -->
+  <g transform="translate(600, 168)" text-anchor="middle">
+    <!-- Big Title -->
+    <text y="0" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="64" font-weight="900" fill="#ffffff" letter-spacing="5">
+      ResQ<tspan fill="#00f0ff">AI</tspan>
+    </text>
+
+    <!-- Subtitle / Tagline -->
+    <text y="32" font-family="monospace" font-size="13" font-weight="700" fill="#38bdf8" letter-spacing="4">
+      AUTONOMOUS MULTI-SOURCE DISASTER INTELLIGENCE &amp; MISSION CONTROL
+    </text>
     
-    <line x1="0" y1="80" x2="1200" y2="80" stroke-dasharray="4 8" />
-    <line x1="0" y1="180" x2="1200" y2="180" stroke-dasharray="4 8" />
-    <line x1="0" y1="280" x2="1200" y2="280" stroke-dasharray="4 8" />
-    <line x1="0" y1="360" x2="1200" y2="360" stroke-dasharray="4 8" />
-  </g>
-
-  <!-- Stylized Stone Arch Silhouette (Stari Most motif) -->
-  <path d="M 180 390 C 260 250, 480 160, 600 160 C 720 160, 940 250, 1020 390" 
-        fill="none" 
-        stroke="url(#stoneGrad)" 
-        stroke-width="5" 
-        opacity="0.32" 
-        stroke-linecap="round" />
-  <path d="M 210 390 C 300 280, 480 200, 600 200 C 720 200, 900 280, 990 390" 
-        fill="none" 
-        stroke="#38bdf8" 
-        stroke-width="2.2" 
-        class="arch-line"
-        opacity="0.75" />
-
-  <!-- Animated River Waves Baseline -->
-  <path d="M 0 395 Q 300 375 600 395 T 1200 395 L 1200 420 L 0 420 Z" 
-        fill="url(#emeraldGrad)" 
-        opacity="0.85" />
-  <path d="M 0 405 Q 300 390 600 405 T 1200 405 L 1200 420 L 0 420 Z" 
-        fill="#0d9488" 
-        opacity="0.6" />
-
-  <!-- Top Tech Badge Bar -->
-  <g transform="translate(60, 52)">
-    <!-- Pill 1: Cinematic Scroll Engine -->
-    <rect x="0" y="0" width="186" height="30" rx="15" fill="#fdf1e1" fill-opacity="0.08" stroke="#fdf1e1" stroke-opacity="0.25" />
-    <circle cx="15" cy="15" r="4" fill="#38bdf8">
-      <animate attributeName="r" values="4;5.5;4" dur="2s" repeatCount="indefinite" />
-      <animate attributeName="opacity" values="1;0.4;1" dur="2s" repeatCount="indefinite" />
-    </circle>
-    <text x="28" y="19" font-family="system-ui, -apple-system, sans-serif" font-size="11.5" font-weight="700" fill="#fdf1e1" letter-spacing="1">CINEMATIC RIG</text>
-
-    <!-- Pill 2: 60 FPS Interpolation -->
-    <rect x="198" y="0" width="184" height="30" rx="15" fill="#fdf1e1" fill-opacity="0.08" stroke="#38bdf8" stroke-opacity="0.3" />
-    <circle cx="213" cy="15" r="4" fill="#4ade80" />
-    <text x="226" y="19" font-family="system-ui, -apple-system, sans-serif" font-size="11.5" font-weight="700" fill="#fdf1e1" letter-spacing="1">LERP INERTIA 60FPS</text>
-
-    <!-- Pill 3: Vanilla Architecture -->
-    <rect x="394" y="0" width="190" height="30" rx="15" fill="#fdf1e1" fill-opacity="0.08" stroke="#fdf1e1" stroke-opacity="0.25" />
-    <circle cx="409" cy="15" r="4" fill="#f59e0b" />
-    <text x="422" y="19" font-family="system-ui, -apple-system, sans-serif" font-size="11.5" font-weight="700" fill="#fdf1e1" letter-spacing="1">VANILLA HTML · CSS · JS</text>
-
-    <!-- Pill 4: GitHub Verified -->
-    <rect x="890" y="0" width="190" height="30" rx="15" fill="#38bdf8" fill-opacity="0.12" stroke="#38bdf8" stroke-opacity="0.5" />
-    <polygon points="906,11 910,19 902,19" fill="#38bdf8" />
-    <text x="920" y="19" font-family="system-ui, -apple-system, sans-serif" font-size="11.5" font-weight="700" fill="#38bdf8" letter-spacing="1">ORIGIN/MAIN ACTIVE</text>
-  </g>
-
-  <!-- Giant Floating Title "MOSTAR" with Serif Flair -->
-  <g class="floating">
-    <text x="600" y="178" 
-          text-anchor="middle" 
-          font-family="'Times New Roman', 'Ogg Medium', Georgia, serif" 
-          font-size="108" 
-          font-weight="500" 
-          letter-spacing="14" 
-          fill="url(#stoneGrad)" 
-          filter="url(#neonGlow)">
-      MOSTAR
+    <text y="54" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" fill="#94a3b8" letter-spacing="1.5">
+      Enterprise AI Decision-Support • Real-Time GIS Telemetry • Drone Search &amp; Rescue • Human-in-the-Loop Dispatch
     </text>
   </g>
 
-  <!-- Tagline / Subtitle -->
-  <text x="600" y="222" 
-        text-anchor="middle" 
-        font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" 
-        font-size="16" 
-        font-weight="600" 
-        fill="#fdf1e1" 
-        letter-spacing="3" 
-        opacity="0.92">
-    BOSNIA AND HERZEGOVINA · CINEMATIC THREE-SCREEN SCROLL STORY
-  </text>
-
-  <!-- Animated Feature Badges (3 Interactive Glass Pillars) -->
-  <g transform="translate(180, 258)">
-    <!-- Feature 1: Parallax Rig -->
-    <g filter="url(#cardShadow)">
-      <rect x="0" y="0" width="250" height="74" rx="16" fill="#0d1822" fill-opacity="0.82" stroke="rgba(253,241,225,0.22)" stroke-width="1.2" />
-      <circle cx="34" cy="37" r="18" fill="#38bdf8" fill-opacity="0.14" />
-      <!-- Compass / Arch icon -->
-      <path d="M 26 44 L 34 26 L 42 44" fill="none" stroke="#38bdf8" stroke-width="2.4" stroke-linecap="round" />
-      <circle cx="34" cy="27" r="2" fill="#38bdf8" />
-      <text x="64" y="32" font-family="sans-serif" font-size="13" font-weight="700" fill="#fdf1e1">Parallax Depth Rig</text>
-      <text x="64" y="49" font-family="sans-serif" font-size="11" font-weight="400" fill="#94a3b8">7 Depth Layers + Shader</text>
+  <!-- Bottom Feature Badges / Cards -->
+  <g transform="translate(60, 290)">
+    <!-- Card 1: Multi-Source Fusion -->
+    <g class="floating-pill" transform="translate(0, 0)">
+      <rect width="250" height="74" rx="12" fill="#0b1728" stroke="#0284c7" stroke-width="1.2" filter="url(#cardShadow)" />
+      <circle cx="28" cy="37" r="16" fill="#0c2a47" />
+      <text x="28" y="42" font-size="16" text-anchor="middle">🛰️</text>
+      <text x="56" y="30" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="700" fill="#ffffff">Multi-Source Fusion</text>
+      <text x="56" y="48" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#94a3b8">SAR Satellites + Drones + Gauges</text>
     </g>
 
-    <!-- Feature 2: Infinite Slider -->
-    <g transform="translate(290, 0)" filter="url(#cardShadow)">
-      <rect x="0" y="0" width="250" height="74" rx="16" fill="#0d1822" fill-opacity="0.82" stroke="rgba(253,241,225,0.22)" stroke-width="1.2" />
-      <circle cx="34" cy="37" r="18" fill="#4ade80" fill-opacity="0.14" />
-      <!-- Infinite loop symbol -->
-      <path d="M 25 37 C 25 32, 31 32, 34 37 C 37 42, 43 42, 43 37 C 43 32, 37 32, 34 37 C 31 42, 25 42, 25 37 Z" fill="none" stroke="#4ade80" stroke-width="2" />
-      <text x="64" y="32" font-family="sans-serif" font-size="13" font-weight="700" fill="#fdf1e1">Infinite Sights Slider</text>
-      <text x="64" y="49" font-family="sans-serif" font-size="11" font-weight="400" fill="#94a3b8">3-Set Circular Buffering</text>
+    <!-- Card 2: Explainable Risk AI -->
+    <g class="floating-pill" transform="translate(276, 0)">
+      <rect width="250" height="74" rx="12" fill="#0b1728" stroke="#10b981" stroke-width="1.2" filter="url(#cardShadow)" />
+      <circle cx="28" cy="37" r="16" fill="#063628" />
+      <text x="28" y="42" font-size="16" text-anchor="middle">🧠</text>
+      <text x="56" y="30" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="700" fill="#ffffff">Explainable Risk AI</text>
+      <text x="56" y="48" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#94a3b8">P1–P4 Dynamic Triage Scoring</text>
     </g>
 
-    <!-- Feature 3: GPU Scrubbing Engine -->
-    <g transform="translate(580, 0)" filter="url(#cardShadow)">
-      <rect x="0" y="0" width="250" height="74" rx="16" fill="#0d1822" fill-opacity="0.82" stroke="rgba(253,241,225,0.22)" stroke-width="1.2" />
-      <circle cx="34" cy="37" r="18" fill="#f59e0b" fill-opacity="0.14" />
-      <!-- Lightning bolt -->
-      <polygon points="34,25 28,37 34,37 32,49 41,35 35,35" fill="#f59e0b" />
-      <text x="64" y="32" font-family="sans-serif" font-size="13" font-weight="700" fill="#fdf1e1">Sticky Frame Engine</text>
-      <text x="64" y="49" font-family="sans-serif" font-size="11" font-weight="400" fill="#94a3b8">3700px Scrub Dynamics</text>
+    <!-- Card 3: Human-in-the-Loop -->
+    <g class="floating-pill" transform="translate(552, 0)">
+      <rect width="250" height="74" rx="12" fill="#0b1728" stroke="#f59e0b" stroke-width="1.2" filter="url(#cardShadow)" />
+      <circle cx="28" cy="37" r="16" fill="#3b2b0a" />
+      <text x="28" y="42" font-size="16" text-anchor="middle">🛡️</text>
+      <text x="56" y="30" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="700" fill="#ffffff">Human-in-the-Loop</text>
+      <text x="56" y="48" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#94a3b8">Commander Sign-off &amp; Audit Trail</text>
+    </g>
+
+    <!-- Card 4: Dynamic Watercraft Routing -->
+    <g class="floating-pill" transform="translate(828, 0)">
+      <rect width="250" height="74" rx="12" fill="#0b1728" stroke="#8b5cf6" stroke-width="1.2" filter="url(#cardShadow)" />
+      <circle cx="28" cy="37" r="16" fill="#261447" />
+      <text x="28" y="42" font-size="16" text-anchor="middle">⚡</text>
+      <text x="56" y="30" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="700" fill="#ffffff">Dijkstra Safe Routing</text>
+      <text x="56" y="48" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#94a3b8">Submerged Avoidance &amp; Boat Paths</text>
     </g>
   </g>
 
-  <!-- Glowing Scanning Light Bar Across Header Top -->
-  <rect x="0" y="0" width="120" height="2" fill="#38bdf8" filter="url(#neonGlow)">
-    <animate attributeName="x" from="-120" to="1200" dur="4.2s" repeatCount="indefinite" />
-  </rect>
+  <!-- Bottom Accent Line -->
+  <line x1="0" y1="418" x2="1200" y2="418" stroke="url(#accentCyan)" stroke-width="2.5" />
 </svg>
