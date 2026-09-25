@@ -1,0 +1,11 @@
+# Explicit language overrides for GitHub Linguist
+*.js linguist-language=JavaScript
+*.jsx linguist-language=JavaScript
+*.py linguist-language=Python
+*.html linguist-language=HTML
+*.css linguist-language=CSS
+
+# Exclude documentation, data fixtures and assets from language statistics
+data/** linguist-vendored
+assets/** linguist-documentation
+docs/** linguist-documentation
