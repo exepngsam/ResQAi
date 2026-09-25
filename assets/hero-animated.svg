@@ -1,0 +1,223 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 420" width="100%" height="100%">
+  <defs>
+    <!-- Background Linear Gradients -->
+    <linearGradient id="skyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0a151f" />
+      <stop offset="40%" stop-color="#142c3d" />
+      <stop offset="70%" stop-color="#0e1d24" />
+      <stop offset="100%" stop-color="#060b0d" />
+    </linearGradient>
+
+    <!-- Emerald River Gradient -->
+    <linearGradient id="emeraldGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#147d7c">
+        <animate attributeName="stop-color" values="#147d7c; #21a396; #0f5c5b; #147d7c" dur="8s" repeatCount="indefinite" />
+      </stop>
+      <stop offset="50%" stop-color="#38bdf8">
+        <animate attributeName="stop-color" values="#38bdf8; #4ade80; #38bdf8" dur="8s" repeatCount="indefinite" />
+      </stop>
+      <stop offset="100%" stop-color="#147d7c">
+        <animate attributeName="stop-color" values="#147d7c; #21a396; #0f5c5b; #147d7c" dur="8s" repeatCount="indefinite" />
+      </stop>
+    </linearGradient>
+
+    <!-- Warm Stone Gradient -->
+    <linearGradient id="stoneGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fdf1e1" />
+      <stop offset="100%" stop-color="#d4bda2" />
+    </linearGradient>
+
+    <!-- Cyber Gold Glow -->
+    <radialGradient id="glowPulse" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.35">
+        <animate attributeName="stop-opacity" values="0.35;0.15;0.35" dur="4s" repeatCount="indefinite" />
+      </stop>
+      <stop offset="60%" stop-color="#0284c7" stop-opacity="0.1">
+        <animate attributeName="stop-opacity" values="0.1;0.03;0.1" dur="4s" repeatCount="indefinite" />
+      </stop>
+      <stop offset="100%" stop-color="#0284c7" stop-opacity="0" />
+    </radialGradient>
+
+    <!-- Filter for luminous glow -->
+    <filter id="neonGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+
+    <filter id="cardShadow" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="0" dy="14" stdDeviation="18" flood-color="#000000" flood-opacity="0.55" />
+    </filter>
+
+    <!-- Keyframe Animations -->
+    <style>
+      @keyframes floatSlow {
+        0%, 100% { transform: translateY(0px) rotate(0deg); }
+        50% { transform: translateY(-7px) rotate(0.4deg); }
+      }
+      @keyframes shimmerLine {
+        0% { transform: translateX(-1200px); }
+        100% { transform: translateX(1200px); }
+      }
+      @keyframes pulseGlow {
+        0%, 100% { opacity: 0.45; }
+        50% { opacity: 0.85; }
+      }
+      @keyframes archPulse {
+        0%, 100% { stroke-dashoffset: 0; }
+        50% { stroke-dashoffset: 24; }
+      }
+      @keyframes beamScan {
+        0% { transform: translateY(-20px); opacity: 0; }
+        50% { opacity: 0.7; }
+        100% { transform: translateY(420px); opacity: 0; }
+      }
+      @keyframes badgeRotate {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+      .floating { animation: floatSlow 6s ease-in-out infinite; }
+      .glowing { animation: pulseGlow 3.5s ease-in-out infinite; }
+      .arch-line { stroke-dasharray: 8 6; animation: archPulse 20s linear infinite; }
+      .laser-beam { animation: beamScan 5s ease-in-out infinite; }
+    </style>
+  </defs>
+
+  <!-- Deep Atmosphere Background -->
+  <rect width="1200" height="420" rx="20" fill="url(#skyGrad)" />
+
+  <!-- Ambient Glow Orb -->
+  <circle cx="600" cy="210" r="280" fill="url(#glowPulse)" />
+
+  <!-- Geometric Grid Matrix overlay (subtle cinematic backdrop) -->
+  <g opacity="0.12" stroke="#38bdf8" stroke-width="0.75">
+    <line x1="100" y1="0" x2="100" y2="420" stroke-dasharray="3 7" />
+    <line x1="250" y1="0" x2="250" y2="420" stroke-dasharray="3 7" />
+    <line x1="400" y1="0" x2="400" y2="420" stroke-dasharray="3 7" />
+    <line x1="600" y1="0" x2="600" y2="420" stroke-dasharray="3 7" />
+    <line x1="800" y1="0" x2="800" y2="420" stroke-dasharray="3 7" />
+    <line x1="950" y1="0" x2="950" y2="420" stroke-dasharray="3 7" />
+    <line x1="1100" y1="0" x2="1100" y2="420" stroke-dasharray="3 7" />
+    
+    <line x1="0" y1="80" x2="1200" y2="80" stroke-dasharray="4 8" />
+    <line x1="0" y1="180" x2="1200" y2="180" stroke-dasharray="4 8" />
+    <line x1="0" y1="280" x2="1200" y2="280" stroke-dasharray="4 8" />
+    <line x1="0" y1="360" x2="1200" y2="360" stroke-dasharray="4 8" />
+  </g>
+
+  <!-- Stylized Stone Arch Silhouette (Stari Most motif) -->
+  <path d="M 180 390 C 260 250, 480 160, 600 160 C 720 160, 940 250, 1020 390" 
+        fill="none" 
+        stroke="url(#stoneGrad)" 
+        stroke-width="5" 
+        opacity="0.32" 
+        stroke-linecap="round" />
+  <path d="M 210 390 C 300 280, 480 200, 600 200 C 720 200, 900 280, 990 390" 
+        fill="none" 
+        stroke="#38bdf8" 
+        stroke-width="2.2" 
+        class="arch-line"
+        opacity="0.75" />
+
+  <!-- Animated River Waves Baseline -->
+  <path d="M 0 395 Q 300 375 600 395 T 1200 395 L 1200 420 L 0 420 Z" 
+        fill="url(#emeraldGrad)" 
+        opacity="0.85" />
+  <path d="M 0 405 Q 300 390 600 405 T 1200 405 L 1200 420 L 0 420 Z" 
+        fill="#0d9488" 
+        opacity="0.6" />
+
+  <!-- Top Tech Badge Bar -->
+  <g transform="translate(60, 52)">
+    <!-- Pill 1: Cinematic Scroll Engine -->
+    <rect x="0" y="0" width="186" height="30" rx="15" fill="#fdf1e1" fill-opacity="0.08" stroke="#fdf1e1" stroke-opacity="0.25" />
+    <circle cx="15" cy="15" r="4" fill="#38bdf8">
+      <animate attributeName="r" values="4;5.5;4" dur="2s" repeatCount="indefinite" />
+      <animate attributeName="opacity" values="1;0.4;1" dur="2s" repeatCount="indefinite" />
+    </circle>
+    <text x="28" y="19" font-family="system-ui, -apple-system, sans-serif" font-size="11.5" font-weight="700" fill="#fdf1e1" letter-spacing="1">CINEMATIC RIG</text>
+
+    <!-- Pill 2: 60 FPS Interpolation -->
+    <rect x="198" y="0" width="184" height="30" rx="15" fill="#fdf1e1" fill-opacity="0.08" stroke="#38bdf8" stroke-opacity="0.3" />
+    <circle cx="213" cy="15" r="4" fill="#4ade80" />
+    <text x="226" y="19" font-family="system-ui, -apple-system, sans-serif" font-size="11.5" font-weight="700" fill="#fdf1e1" letter-spacing="1">LERP INERTIA 60FPS</text>
+
+    <!-- Pill 3: Vanilla Architecture -->
+    <rect x="394" y="0" width="190" height="30" rx="15" fill="#fdf1e1" fill-opacity="0.08" stroke="#fdf1e1" stroke-opacity="0.25" />
+    <circle cx="409" cy="15" r="4" fill="#f59e0b" />
+    <text x="422" y="19" font-family="system-ui, -apple-system, sans-serif" font-size="11.5" font-weight="700" fill="#fdf1e1" letter-spacing="1">VANILLA HTML · CSS · JS</text>
+
+    <!-- Pill 4: GitHub Verified -->
+    <rect x="890" y="0" width="190" height="30" rx="15" fill="#38bdf8" fill-opacity="0.12" stroke="#38bdf8" stroke-opacity="0.5" />
+    <polygon points="906,11 910,19 902,19" fill="#38bdf8" />
+    <text x="920" y="19" font-family="system-ui, -apple-system, sans-serif" font-size="11.5" font-weight="700" fill="#38bdf8" letter-spacing="1">ORIGIN/MAIN ACTIVE</text>
+  </g>
+
+  <!-- Giant Floating Title "MOSTAR" with Serif Flair -->
+  <g class="floating">
+    <text x="600" y="178" 
+          text-anchor="middle" 
+          font-family="'Times New Roman', 'Ogg Medium', Georgia, serif" 
+          font-size="108" 
+          font-weight="500" 
+          letter-spacing="14" 
+          fill="url(#stoneGrad)" 
+          filter="url(#neonGlow)">
+      MOSTAR
+    </text>
+  </g>
+
+  <!-- Tagline / Subtitle -->
+  <text x="600" y="222" 
+        text-anchor="middle" 
+        font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" 
+        font-size="16" 
+        font-weight="600" 
+        fill="#fdf1e1" 
+        letter-spacing="3" 
+        opacity="0.92">
+    BOSNIA AND HERZEGOVINA · CINEMATIC THREE-SCREEN SCROLL STORY
+  </text>
+
+  <!-- Animated Feature Badges (3 Interactive Glass Pillars) -->
+  <g transform="translate(180, 258)">
+    <!-- Feature 1: Parallax Rig -->
+    <g filter="url(#cardShadow)">
+      <rect x="0" y="0" width="250" height="74" rx="16" fill="#0d1822" fill-opacity="0.82" stroke="rgba(253,241,225,0.22)" stroke-width="1.2" />
+      <circle cx="34" cy="37" r="18" fill="#38bdf8" fill-opacity="0.14" />
+      <!-- Compass / Arch icon -->
+      <path d="M 26 44 L 34 26 L 42 44" fill="none" stroke="#38bdf8" stroke-width="2.4" stroke-linecap="round" />
+      <circle cx="34" cy="27" r="2" fill="#38bdf8" />
+      <text x="64" y="32" font-family="sans-serif" font-size="13" font-weight="700" fill="#fdf1e1">Parallax Depth Rig</text>
+      <text x="64" y="49" font-family="sans-serif" font-size="11" font-weight="400" fill="#94a3b8">7 Depth Layers + Shader</text>
+    </g>
+
+    <!-- Feature 2: Infinite Slider -->
+    <g transform="translate(290, 0)" filter="url(#cardShadow)">
+      <rect x="0" y="0" width="250" height="74" rx="16" fill="#0d1822" fill-opacity="0.82" stroke="rgba(253,241,225,0.22)" stroke-width="1.2" />
+      <circle cx="34" cy="37" r="18" fill="#4ade80" fill-opacity="0.14" />
+      <!-- Infinite loop symbol -->
+      <path d="M 25 37 C 25 32, 31 32, 34 37 C 37 42, 43 42, 43 37 C 43 32, 37 32, 34 37 C 31 42, 25 42, 25 37 Z" fill="none" stroke="#4ade80" stroke-width="2" />
+      <text x="64" y="32" font-family="sans-serif" font-size="13" font-weight="700" fill="#fdf1e1">Infinite Sights Slider</text>
+      <text x="64" y="49" font-family="sans-serif" font-size="11" font-weight="400" fill="#94a3b8">3-Set Circular Buffering</text>
+    </g>
+
+    <!-- Feature 3: GPU Scrubbing Engine -->
+    <g transform="translate(580, 0)" filter="url(#cardShadow)">
+      <rect x="0" y="0" width="250" height="74" rx="16" fill="#0d1822" fill-opacity="0.82" stroke="rgba(253,241,225,0.22)" stroke-width="1.2" />
+      <circle cx="34" cy="37" r="18" fill="#f59e0b" fill-opacity="0.14" />
+      <!-- Lightning bolt -->
+      <polygon points="34,25 28,37 34,37 32,49 41,35 35,35" fill="#f59e0b" />
+      <text x="64" y="32" font-family="sans-serif" font-size="13" font-weight="700" fill="#fdf1e1">Sticky Frame Engine</text>
+      <text x="64" y="49" font-family="sans-serif" font-size="11" font-weight="400" fill="#94a3b8">3700px Scrub Dynamics</text>
+    </g>
+  </g>
+
+  <!-- Glowing Scanning Light Bar Across Header Top -->
+  <rect x="0" y="0" width="120" height="2" fill="#38bdf8" filter="url(#neonGlow)">
+    <animate attributeName="x" from="-120" to="1200" dur="4.2s" repeatCount="indefinite" />
+  </rect>
+</svg>
