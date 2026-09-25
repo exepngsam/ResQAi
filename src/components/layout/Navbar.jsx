@@ -113,29 +113,29 @@ const Navbar = ({
     <>
       <header className="h-16 bg-[#050505]/90 backdrop-blur-md border-b border-white/[0.08] px-4 md:px-8 flex items-center justify-between select-none z-40 sticky top-0 font-sans">
         {/* LEFT: RESQAI Logo + System Online */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3.5">
           <div
             onClick={() => onTabChange && onTabChange("dashboard")}
             className="flex items-center gap-2.5 cursor-pointer group"
           >
-            <div className="w-8 h-8 rounded-lg bg-red-600/90 border border-red-500/80 flex items-center justify-center text-white shadow-lg shadow-red-950/50 group-hover:scale-105 transition-transform duration-200">
-              <ShieldAlert className="w-4 h-4" />
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-red-600 to-red-900 border border-red-500/60 flex items-center justify-center text-white shadow-[0_0_14px_rgba(239,68,68,0.35)] group-hover:scale-105 transition-transform duration-200">
+              <ShieldAlert className="w-4 h-4 text-white" />
             </div>
-            <div className="flex items-center gap-1.5">
+            <div className="flex items-center gap-1">
               <span className="font-extrabold tracking-tighter text-base text-white">
                 RESQ<span className="text-red-500">AI</span>
               </span>
             </div>
           </div>
 
-          <div className="hidden sm:flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-white/[0.03] border border-white/10 text-[10px] font-mono text-secondary">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-            <span>SYSTEM ONLINE</span>
+          <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/25 text-[10px] font-mono text-emerald-400">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_6px_rgba(52,211,153,0.8)]" />
+            <span className="tracking-wider font-semibold">SYSTEM ONLINE</span>
           </div>
         </div>
 
         {/* CENTER: Primary Navigation Links (Desktop) */}
-        <nav className="hidden lg:flex items-center gap-1 bg-white/[0.02] border border-white/[0.06] p-1 rounded-lg">
+        <nav className="hidden lg:flex items-center gap-1 bg-white/[0.02] border border-white/[0.06] p-1 rounded-xl">
           {navItems.map((item) => {
             const isActive = currentTab === item.id;
             return (
@@ -143,10 +143,10 @@ const Navbar = ({
                 key={item.id}
                 type="button"
                 onClick={() => onTabChange && onTabChange(item.id)}
-                className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all duration-200 cursor-pointer ${
+                className={`px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 cursor-pointer ${
                   isActive
                     ? "bg-white text-black shadow-sm font-semibold"
-                    : "text-secondary hover:text-white hover:bg-white/[0.04]"
+                    : "text-zinc-400 hover:text-white hover:bg-white/[0.04]"
                 }`}
               >
                 {item.label}
