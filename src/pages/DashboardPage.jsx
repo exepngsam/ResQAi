@@ -58,18 +58,22 @@ const DashboardPage = ({
               <span className="text-emerald-400 font-semibold">LIVE HUD</span>
             </div>
 
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tighter text-white leading-none">
-              TURN CHAOS<br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-white/90 to-white/60">
-                INTO ACTION.
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tighter text-white leading-tight">
+              <span className="block overflow-hidden pb-1">
+                <span className="animate-line-reveal-1">TURN CHAOS</span>
+              </span>
+              <span className="block overflow-hidden">
+                <span className="animate-line-reveal-2 text-transparent bg-clip-text bg-gradient-to-r from-white via-white/90 to-white/60">
+                  INTO ACTION.
+                </span>
               </span>
             </h1>
 
-            <p className="text-xs sm:text-sm text-secondary max-w-xl font-normal leading-relaxed">
+            <p className="text-xs sm:text-sm text-secondary max-w-xl font-normal leading-relaxed delay-140 animate-blur-fade-up">
               "Real-time disaster intelligence for faster, safer and more coordinated emergency response."
             </p>
 
-            <div className="flex flex-wrap items-center gap-3 pt-2">
+            <div className="flex flex-wrap items-center gap-3 pt-2 delay-200 animate-blur-fade-up">
               <Button
                 variant="primary"
                 size="md"
@@ -95,7 +99,7 @@ const DashboardPage = ({
           </div>
 
           {/* Right: Compact Tactical Status Panel */}
-          <div className="lg:col-span-5 grid grid-cols-2 gap-2.5 font-mono">
+          <div className="lg:col-span-5 grid grid-cols-2 gap-2.5 font-mono delay-220 animate-blur-fade-up">
             <div className="p-3.5 rounded-xl bg-white/[0.02] border border-white/[0.06]">
               <div className="text-[10px] text-muted uppercase">AFFECTED POPULATION</div>
               <div className="text-xl md:text-2xl font-bold text-white mt-1">
@@ -135,7 +139,7 @@ const DashboardPage = ({
           18. COMMANDER APPROVAL CALLOUT (HITL Core Requirement)
           ===================================================================== */}
       {pendingMission && (
-        <div className="p-4 md:p-5 rounded-xl liquid-glass border border-red-500/40 bg-red-500/[0.03] shadow-lg flex flex-col md:flex-row md:items-center justify-between gap-4 animate-blur-fade-up">
+        <div className="p-4 md:p-5 rounded-xl liquid-glass border border-red-500/40 bg-red-950/20 emergency-breathe flex flex-col md:flex-row md:items-center justify-between gap-4 animate-blur-fade-up">
           <div className="flex items-start gap-3.5">
             <div className="w-10 h-10 rounded-lg bg-red-500/10 border border-red-500/30 flex items-center justify-center text-red-400 shrink-0 mt-0.5">
               <AlertOctagon className="w-5 h-5 animate-pulse" />

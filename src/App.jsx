@@ -6,6 +6,10 @@ import { Sidebar } from "./components/layout/Sidebar";
 import { ApprovalModal } from "./components/missions/ApprovalModal";
 import { AlertCenterDrawer } from "./components/common/AlertCenterDrawer";
 import { CinematicIntro } from "./components/common/CinematicIntro";
+import { PageTransition } from "./components/common/PageTransition";
+import { ToastContainer } from "./components/common/ToastContainer";
+import { toast } from "./utils/toast";
+
 import { DashboardPage } from "./pages/DashboardPage";
 import { MapPage } from "./pages/MapPage";
 import { IncidentsPage } from "./pages/IncidentsPage";
@@ -26,6 +30,9 @@ function App() {
   const [simulationRunning, setSimulationRunning] = useState(false);
   const [simulationStep, setSimulationStep] = useState(0);
   const [isAlertsOpen, setIsAlertsOpen] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [focusMode, setFocusMode] = useState(false);
+
   const [showIntro, setShowIntro] = useState(() => {
     try {
       return !localStorage.getItem("resqai_intro_seen");
@@ -43,6 +50,23 @@ function App() {
     { time: "12:45", event: "Alternative watercraft route R-18 calculated (ETA 11 min)", type: "INFO" },
     { time: "12:46", event: "SCB Medical College pre-staged 34 trauma beds for incoming evacuees", type: "INFO" }
   ]);
+
+  // Keyboard shortcut for Focus Mode (Ctrl/Cmd + Shift + F) - Section 62
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === "f" || e.key === "F")) {
+        e.preventDefault();
+        setFocusMode((prev) => {
+          const next = !prev;
+          setSidebarCollapsed(next);
+          toast.info(next ? "Focus Mode Active: Map expanded, sidebar minimized." : "Focus Mode Deactivated: Standard layout restored.", "FOCUS TOGGLE");
+          return next;
+        });
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
 
   useEffect(() => {
     const load = async () => {
@@ -109,6 +133,11 @@ function App() {
           type: "DECISION"
         }
       ]);
+
+      toast.success(
+        `Mission ${missionId} authorized by ${officerName}. Rescue Team 04 dispatched to Zone 7.`,
+        "MISSION APPROVED"
+      );
     }
   };
 
@@ -119,17 +148,20 @@ function App() {
         m.id === missionId ? { ...m, status: "REJECTED", rejection_reason: reason } : m
       );
       setSummary({ ...summary, active_missions: updatedMissions });
+      toast.warning(`Mission ${missionId} rejected: ${reason}`, "MISSION REJECTED");
     }
   };
 
   const handleStartSimulation = async (speed) => {
     setSimulationRunning(true);
     await api.startSimulation(speed);
+    toast.info(`Cat-4 Flood Inundation Simulation initiated at ${speed}× speed.`, "SIMULATION STARTED");
   };
 
   const handlePauseSimulation = async () => {
     setSimulationRunning(false);
     await api.pauseSimulation();
+    toast.info("Simulation paused.", "SIMULATION PAUSED");
   };
 
   const handleResetSimulation = async () => {
@@ -139,6 +171,7 @@ function App() {
     if (res.summary) {
       setSummary(res.summary);
     }
+    toast.info("Simulation telemetry reset to baseline state.", "SIMULATION RESET");
   };
 
   if (!summary) {
@@ -159,6 +192,9 @@ function App() {
 
   return (
     <div className="min-h-screen bg-[#050505] text-[#FFFFFF] flex flex-col font-sans selection:bg-red-500/30 selection:text-white">
+      {/* Toast Layer (Section 37) */}
+      <ToastContainer />
+
       {/* Cinematic Opening Video Experience (Section 6 & 57) */}
       {showIntro && (
         <CinematicIntro onEnter={() => setShowIntro(false)} />
@@ -177,96 +213,106 @@ function App() {
       />
 
       <div className="flex-1 flex overflow-hidden">
-        {/* Left Operational Sidebar */}
+        {/* Left Operational Sidebar with Collapse & Focus Mode (Section 43 & 62) */}
         <Sidebar
           currentTab={currentTab}
           onTabChange={(tab) => setCurrentTab(tab)}
           pendingMissionsCount={pendingCount}
           criticalIncidentsCount={criticalIncidentsCount}
           offlineQueueCount={7}
+          collapsed={sidebarCollapsed || focusMode}
+          onToggleCollapse={() => setSidebarCollapsed(!sidebarCollapsed)}
+          focusMode={focusMode}
+          onToggleFocusMode={() => {
+            const next = !focusMode;
+            setFocusMode(next);
+            setSidebarCollapsed(next);
+          }}
         />
 
-        {/* Main Work Area */}
+        {/* Main Work Area with Smooth PageTransition (Section 12, 13, 14) */}
         <main className="flex-1 overflow-y-auto p-4 md:p-6 bg-[#050505]">
-          {currentTab === "dashboard" && (
-            <DashboardPage
-              summary={summary}
-              onOpenMissionApproval={(mission) => setSelectedMissionForApproval(mission)}
-              onNavigate={(tab) => setCurrentTab(tab)}
-            />
-          )}
+          <PageTransition pageKey={currentTab}>
+            {currentTab === "dashboard" && (
+              <DashboardPage
+                summary={summary}
+                onOpenMissionApproval={(mission) => setSelectedMissionForApproval(mission)}
+                onNavigate={(tab) => setCurrentTab(tab)}
+              />
+            )}
 
-          {currentTab === "map" && (
-            <MapPage
-              zones={summary.zones}
-              incidents={summary.recent_incidents}
-            />
-          )}
+            {currentTab === "map" && (
+              <MapPage
+                zones={summary.zones}
+                incidents={summary.recent_incidents}
+              />
+            )}
 
-          {currentTab === "incidents" && (
-            <IncidentsPage
-              incidents={summary.recent_incidents}
-              timelineEvents={timelineEvents}
-              onOpenApproval={(mission) => setSelectedMissionForApproval(mission)}
-            />
-          )}
+            {currentTab === "incidents" && (
+              <IncidentsPage
+                incidents={summary.recent_incidents}
+                timelineEvents={timelineEvents}
+                onOpenApproval={(mission) => setSelectedMissionForApproval(mission)}
+              />
+            )}
 
-          {currentTab === "missions" && (
-            <MissionsPage
-              missions={summary.active_missions}
-              onOpenApproval={(mission) => setSelectedMissionForApproval(mission)}
-              onRejectMission={handleRejectMission}
-            />
-          )}
+            {currentTab === "missions" && (
+              <MissionsPage
+                missions={summary.active_missions}
+                onOpenApproval={(mission) => setSelectedMissionForApproval(mission)}
+                onRejectMission={handleRejectMission}
+              />
+            )}
 
-          {currentTab === "resources" && (
-            <ResourcesPage
-              rescueTeams={summary.rescue_teams || []}
-              shelters={summary.shelters || []}
-              hospitals={summary.hospitals || []}
-              ambulances={summary.ambulances || []}
-            />
-          )}
+            {currentTab === "resources" && (
+              <ResourcesPage
+                rescueTeams={summary.rescue_teams || []}
+                shelters={summary.shelters || []}
+                hospitals={summary.hospitals || []}
+                ambulances={summary.ambulances || []}
+              />
+            )}
 
-          {currentTab === "analytics" && (
-            <AnalyticsPage summary={summary} />
-          )}
+            {currentTab === "analytics" && (
+              <AnalyticsPage summary={summary} />
+            )}
 
-          {currentTab === "copilot" && (
-            <CopilotPage
-              onOpenMissionApproval={(mission) => setSelectedMissionForApproval(mission)}
-              onNavigate={(tab) => setCurrentTab(tab)}
-            />
-          )}
+            {currentTab === "copilot" && (
+              <CopilotPage
+                onOpenMissionApproval={(mission) => setSelectedMissionForApproval(mission)}
+                onNavigate={(tab) => setCurrentTab(tab)}
+              />
+            )}
 
-          {currentTab === "reports" && (
-            <ReportsPage summary={summary} />
-          )}
+            {currentTab === "reports" && (
+              <ReportsPage summary={summary} />
+            )}
 
-          {currentTab === "simulation" && (
-            <SimulationPage
-              running={simulationRunning}
-              step={simulationStep}
-              maxSteps={7}
-              speed={1}
-              onStart={handleStartSimulation}
-              onPause={handlePauseSimulation}
-              onReset={handleResetSimulation}
-              onNavigate={(tab) => setCurrentTab(tab)}
-            />
-          )}
+            {currentTab === "simulation" && (
+              <SimulationPage
+                running={simulationRunning}
+                step={simulationStep}
+                maxSteps={7}
+                speed={1}
+                onStart={handleStartSimulation}
+                onPause={handlePauseSimulation}
+                onReset={handleResetSimulation}
+                onNavigate={(tab) => setCurrentTab(tab)}
+              />
+            )}
 
-          {currentTab === "citizen-report" && (
-            <CitizenReportPage />
-          )}
+            {currentTab === "citizen-report" && (
+              <CitizenReportPage />
+            )}
 
-          {currentTab === "mobile-response" && (
-            <MobileResponsePage missions={summary.active_missions} />
-          )}
+            {currentTab === "mobile-response" && (
+              <MobileResponsePage missions={summary.active_missions} />
+            )}
 
-          {currentTab === "settings" && (
-            <SettingsPage onReplayIntro={() => setShowIntro(true)} />
-          )}
+            {currentTab === "settings" && (
+              <SettingsPage onReplayIntro={() => setShowIntro(true)} />
+            )}
+          </PageTransition>
         </main>
       </div>
 

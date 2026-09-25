@@ -9,7 +9,16 @@
     --text-secondary: #A1A1AA;
     --text-muted: #71717A;
     --border-subtle: rgba(255, 255, 255, 0.08);
+    --border-strong: rgba(255, 255, 255, 0.14);
     --glass-bg: rgba(255, 255, 255, 0.025);
+
+    /* 49. MOTION TOKENS */
+    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);
+    --duration-fast: 180ms;
+    --duration-medium: 350ms;
+    --duration-slow: 600ms;
+    --duration-cinematic: 900ms;
   }
 
   body {
@@ -21,31 +30,41 @@
 
   h1, h2, h3, h4, h5, h6 {
     letter-spacing: -0.04em;
-    font-weight: 700;
+    font-weight: 600;
+  }
+
+  .label-tactical {
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 600;
   }
 }
 
 /* ==========================================================================
-   7. BOTTOM BLUR SYSTEM
+   7. GLOBAL GLASS SYSTEM
    ========================================================================== */
-.bottom-blur {
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  mask-image: linear-gradient(to top, black 0%, transparent 45%);
-  -webkit-mask-image: linear-gradient(to top, black 0%, transparent 45%);
-  pointer-events: none;
+.glass-panel {
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.035),
+    rgba(255, 255, 255, 0.012)
+  );
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(14px) saturate(108%);
+  -webkit-backdrop-filter: blur(14px) saturate(108%);
 }
 
 /* ==========================================================================
-   8. LIQUID GLASS COMPONENT
+   8. LIQUID GLASS COMPONENT & BUTTON
    ========================================================================== */
 .liquid-glass {
   background: rgba(255, 255, 255, 0.015);
   background-blend-mode: luminosity;
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.08);
   position: relative;
   overflow: hidden;
 }
@@ -72,13 +91,50 @@
 }
 
 /* ==========================================================================
-   10. BLUR FADE UP MOTION
+   7. BOTTOM BLUR SYSTEM
+   ========================================================================== */
+.bottom-blur {
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  mask-image: linear-gradient(to top, black 0%, transparent 45%);
+  -webkit-mask-image: linear-gradient(to top, black 0%, transparent 45%);
+  pointer-events: none;
+}
+
+/* ==========================================================================
+   16. HERO TITLE LINE REVEAL ANIMATION
+   ========================================================================== */
+@keyframes lineReveal {
+  from {
+    transform: translate3d(0, 110%, 0) skewY(2deg);
+    opacity: 0;
+  }
+  to {
+    transform: translate3d(0, 0, 0) skewY(0);
+    opacity: 1;
+  }
+}
+
+.animate-line-reveal-1 {
+  display: inline-block;
+  animation: lineReveal 850ms cubic-bezier(0.22, 1, 0.36, 1) 250ms forwards;
+  will-change: transform, opacity;
+}
+
+.animate-line-reveal-2 {
+  display: inline-block;
+  animation: lineReveal 850ms cubic-bezier(0.22, 1, 0.36, 1) 380ms forwards;
+  will-change: transform, opacity;
+}
+
+/* ==========================================================================
+   10 & 12. PAGE TRANSITIONS & BLUR FADE UP MOTION
    ========================================================================== */
 @keyframes blurFadeUp {
   from {
     opacity: 0;
-    filter: blur(20px);
-    transform: translateY(32px);
+    filter: blur(16px);
+    transform: translateY(24px);
   }
   to {
     opacity: 1;
@@ -88,15 +144,88 @@
 }
 
 .animate-blur-fade-up {
-  animation: blurFadeUp 0.85s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: blurFadeUp 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes pageEnter {
+  from {
+    opacity: 0;
+    filter: blur(10px);
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0);
+  }
+}
+
+.page-enter {
+  animation: pageEnter 450ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 /* Stagger delay utilities */
-.delay-100 { animation-delay: 100ms; }
+.delay-80 { animation-delay: 80ms; }
+.delay-140 { animation-delay: 140ms; }
 .delay-200 { animation-delay: 200ms; }
-.delay-300 { animation-delay: 300ms; }
-.delay-400 { animation-delay: 400ms; }
-.delay-500 { animation-delay: 500ms; }
+.delay-220 { animation-delay: 220ms; }
+.delay-280 { animation-delay: 280ms; }
+.delay-360 { animation-delay: 360ms; }
+
+/* ==========================================================================
+   18. COMMANDER ACTION PANEL EMERGENCY BREATHE GLOW
+   ========================================================================== */
+@keyframes emergencyBreathe {
+  0%, 100% {
+    box-shadow: 0 0 0 1px rgba(255, 60, 60, 0.12), 0 0 20px rgba(255, 40, 40, 0.04);
+  }
+  50% {
+    box-shadow: 0 0 0 1px rgba(255, 60, 60, 0.28), 0 0 35px rgba(255, 40, 40, 0.12);
+  }
+}
+
+.emergency-breathe {
+  animation: emergencyBreathe 3.2s ease-in-out infinite;
+}
+
+/* ==========================================================================
+   37. TOAST NOTIFICATION SLIDE-IN
+   ========================================================================== */
+@keyframes toastEnter {
+  from {
+    transform: translateX(40px);
+    opacity: 0;
+    filter: blur(6px);
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+.toast-enter {
+  animation: toastEnter 350ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* ==========================================================================
+   38. SHIMMER SKELETON
+   ========================================================================== */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.skeleton-shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.03) 25%,
+    rgba(255, 255, 255, 0.07) 50%,
+    rgba(255, 255, 255, 0.03) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite ease-in-out;
+}
 
 /* ==========================================================================
    9. BUTTON SYSTEM
@@ -109,7 +238,7 @@
   font-size: 0.8125rem;
   font-weight: 500;
   border-radius: 0.5rem;
-  transition: all 250ms cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 220ms cubic-bezier(0.16, 1, 0.3, 1);
   cursor: pointer;
   user-select: none;
   white-space: nowrap;
@@ -128,7 +257,6 @@
   cursor: not-allowed;
 }
 
-/* Primary Button: White background, black text */
 .btn-primary {
   background-color: #FFFFFF;
   color: #000000;
@@ -139,7 +267,6 @@
   box-shadow: 0 6px 20px rgba(255, 255, 255, 0.25);
 }
 
-/* Secondary Button: Subtle dark border, white text */
 .btn-secondary {
   background-color: rgba(255, 255, 255, 0.04);
   color: #FFFFFF;
@@ -150,7 +277,6 @@
   border-color: rgba(255, 255, 255, 0.2);
 }
 
-/* Glass Button: Liquid glass styling */
 .btn-glass {
   background: rgba(255, 255, 255, 0.03);
   backdrop-filter: blur(8px);
@@ -164,7 +290,6 @@
   border-color: rgba(255, 255, 255, 0.25);
 }
 
-/* Danger Button: Reserved for high-impact actions */
 .btn-danger {
   background-color: rgba(239, 68, 68, 0.15);
   color: #EF4444;
@@ -177,7 +302,6 @@
   box-shadow: 0 4px 18px rgba(239, 68, 68, 0.35);
 }
 
-/* Ghost Button: Transparent, minimal */
 .btn-ghost {
   background-color: transparent;
   color: #A1A1AA;
@@ -246,4 +370,16 @@
 
 .radar-ping {
   animation: radar-pulse 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+/* ==========================================================================
+   50. REDUCED MOTION SUPPORT
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
