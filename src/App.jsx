@@ -191,7 +191,7 @@ function App() {
   const criticalIncidentsCount = summary.recent_incidents?.filter((i) => i.priority === "P1").length || 0;
 
   return (
-    <div className="min-h-screen bg-[#050505] text-[#FFFFFF] flex flex-col font-sans selection:bg-red-500/30 selection:text-white">
+    <div className="h-screen w-screen overflow-hidden bg-[#050505] text-[#FFFFFF] flex flex-col font-sans selection:bg-red-500/30 selection:text-white">
       {/* Toast Layer (Section 37) */}
       <ToastContainer />
 
@@ -200,20 +200,22 @@ function App() {
         <CinematicIntro onEnter={() => setShowIntro(false)} />
       )}
 
-      {/* Top Telemetry & Status Navbar */}
-      <Navbar
-        disaster={summary.disaster}
-        activeSimulationStep={simulationStep}
-        simulationRunning={simulationRunning}
-        currentTab={currentTab}
-        onTabChange={(tab) => setCurrentTab(tab)}
-        onOpenAlerts={() => setIsAlertsOpen(true)}
-        unreadAlertsCount={3}
-        onOpenIntro={() => setShowIntro(true)}
-      />
+      {/* Top Telemetry & Status Navbar (Fixed at top) */}
+      <div className="shrink-0 z-40 w-full">
+        <Navbar
+          disaster={summary.disaster}
+          activeSimulationStep={simulationStep}
+          simulationRunning={simulationRunning}
+          currentTab={currentTab}
+          onTabChange={(tab) => setCurrentTab(tab)}
+          onOpenAlerts={() => setIsAlertsOpen(true)}
+          unreadAlertsCount={3}
+          onOpenIntro={() => setShowIntro(true)}
+        />
+      </div>
 
-      <div className="flex-1 flex overflow-hidden">
-        {/* Left Operational Sidebar with Collapse & Focus Mode (Section 43 & 62) */}
+      <div className="flex-1 flex overflow-hidden min-h-0 w-full">
+        {/* Left Operational Sidebar (Fixed at left) */}
         <Sidebar
           currentTab={currentTab}
           onTabChange={(tab) => setCurrentTab(tab)}
@@ -230,8 +232,8 @@ function App() {
           }}
         />
 
-        {/* Main Work Area with Smooth PageTransition (Section 12, 13, 14) */}
-        <main className="flex-1 overflow-y-auto p-4 md:p-6 bg-[#050505]">
+        {/* Main Work Area (Only this area scrolls) */}
+        <main className="flex-1 overflow-y-auto min-h-0 p-4 md:p-6 bg-[#050505] scroll-smooth overscroll-contain">
           <PageTransition pageKey={currentTab}>
             {currentTab === "dashboard" && (
               <DashboardPage

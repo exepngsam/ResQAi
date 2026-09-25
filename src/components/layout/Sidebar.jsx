@@ -77,7 +77,7 @@ const Sidebar = ({
       {/* Top Header & Navigation Group */}
       <div className="flex-1 flex flex-col min-h-0">
         {/* Section Header */}
-        <div className="pt-4 pb-2 px-3">
+        <div className="shrink-0 pt-4 pb-2 px-3">
           <div className="flex items-center justify-between px-2 pb-2.5 border-b border-white/[0.06]">
             {!collapsed ? (
               <>
@@ -130,7 +130,7 @@ const Sidebar = ({
         </div>
 
         {/* Scrollable Navigation Items */}
-        <div className="flex-1 overflow-y-auto px-2.5 py-1 space-y-1">
+        <div className="flex-1 overflow-y-auto min-h-0 px-2.5 py-1 space-y-1">
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = currentTab === item.id;
@@ -188,7 +188,7 @@ const Sidebar = ({
       </div>
 
       {/* Bottom Telemetry & Diagnostics Dock */}
-      <div className="p-3 border-t border-white/[0.08] bg-[#050505]/90 space-y-2">
+      <div className="shrink-0 p-3 border-t border-white/[0.08] bg-[#050505]/90 space-y-2">
         {!collapsed ? (
           <>
             {/* Offline Sync Telemetry Card */}
