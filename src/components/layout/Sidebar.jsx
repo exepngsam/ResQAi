@@ -69,16 +69,16 @@ const Sidebar = ({
 
   return (
     <aside
-      className={`bg-[#060608] border-r border-white/[0.08] flex flex-col justify-between select-none h-full z-30 shrink-0 font-sans transition-all duration-[400ms] ${
-        collapsed ? "w-18" : "w-64"
+      className={`bg-[#060608] border-r border-white/[0.08] flex flex-col justify-between select-none h-full z-30 shrink-0 font-sans transition-all duration-300 ${
+        collapsed ? "w-16" : "w-64"
       }`}
       style={{ transitionTimingFunction: "cubic-bezier(0.16, 1, 0.3, 1)" }}
     >
       {/* Top Header & Navigation Group */}
       <div className="flex-1 flex flex-col min-h-0">
         {/* Section Header */}
-        <div className="shrink-0 pt-4 pb-2 px-3">
-          <div className="flex items-center justify-between px-2 pb-2.5 border-b border-white/[0.06]">
+        <div className="shrink-0 pt-4 pb-2 px-2.5">
+          <div className="flex items-center justify-between px-1.5 pb-2.5 border-b border-white/[0.06]">
             {!collapsed ? (
               <>
                 <div className="flex items-center gap-2">
@@ -118,11 +118,15 @@ const Sidebar = ({
               <div className="w-full flex justify-center py-0.5">
                 <button
                   type="button"
-                  onClick={onToggleCollapse}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    if (onToggleCollapse) onToggleCollapse();
+                  }}
                   title="Expand Sidebar"
-                  className="p-1.5 rounded-lg hover:bg-white/10 text-zinc-400 hover:text-white transition-colors cursor-pointer"
+                  className="p-2 rounded-lg bg-cyan-950/40 hover:bg-cyan-900/60 border border-cyan-500/40 text-cyan-300 hover:text-white transition-all cursor-pointer shadow-lg shadow-cyan-950/50 flex items-center justify-center group"
                 >
-                  <PanelLeftOpen className="w-4 h-4 text-cyan-400" />
+                  <PanelLeftOpen className="w-4 h-4 text-cyan-400 group-hover:scale-110 transition-transform" />
                 </button>
               </div>
             )}

@@ -223,7 +223,14 @@ function App() {
           criticalIncidentsCount={criticalIncidentsCount}
           offlineQueueCount={7}
           collapsed={sidebarCollapsed || focusMode}
-          onToggleCollapse={() => setSidebarCollapsed(!sidebarCollapsed)}
+          onToggleCollapse={() => {
+            if (focusMode) {
+              setFocusMode(false);
+              setSidebarCollapsed(false);
+            } else {
+              setSidebarCollapsed((prev) => !prev);
+            }
+          }}
           focusMode={focusMode}
           onToggleFocusMode={() => {
             const next = !focusMode;

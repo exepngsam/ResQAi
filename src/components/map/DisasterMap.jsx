@@ -8,16 +8,9 @@ import {
   saveMapConfig
 } from "../../utils/mapConfig";
 import {
-  Layers,
   Crosshair,
   Maximize2,
   Compass,
-  AlertTriangle,
-  LifeBuoy,
-  Shield,
-  Activity,
-  Home,
-  Navigation,
   Globe
 } from "lucide-react";
 
@@ -40,6 +33,7 @@ const DisasterMap = ({
   const mapContainerRef = useRef(null);
   const mapInstanceRef = useRef(null);
   const baseTileLayerRef = useRef(null);
+  const labelsTileLayerRef = useRef(null);
   const weatherTileLayerRef = useRef(null);
   const [activeConfig, setActiveConfig] = useState(propMapConfig || getMapConfig());
   const [mouseCoords, setMouseCoords] = useState({ lat: 20.35, lng: 86.15 });
@@ -112,12 +106,12 @@ const DisasterMap = ({
     }
   };
 
-  // Toggle Satellite vs Dark Matter directly on the map
+  // Toggle Satellite vs Clean Dark Canvas directly on the map (Zero Key & Watermark Free)
   const handleToggleBasemap = () => {
     const newSatellite = !isSatellite;
     setIsSatellite(newSatellite);
     const updated = saveMapConfig({
-      provider: newSatellite ? "esri_satellite" : "carto_dark"
+      provider: newSatellite ? "esri_satellite" : "esri_dark"
     });
     setActiveConfig(updated);
   };
@@ -152,10 +146,18 @@ const DisasterMap = ({
     const baseLayer = L.tileLayer(def.url, {
       attribution: def.attribution,
       subdomains: def.subdomains || "abcd",
-      maxZoom: def.maxZoom
+      maxZoom: def.maxZoom || 18
     }).addTo(map);
 
     baseTileLayerRef.current = baseLayer;
+
+    // Add reference labels layer if available (e.g. Esri Dark Reference)
+    if (def.labelsUrl) {
+      labelsTileLayerRef.current = L.tileLayer(def.labelsUrl, {
+        maxZoom: def.maxZoom || 18,
+        pane: "tilePane"
+      }).addTo(map);
+    }
 
     const layerGroups = {
       zones: L.layerGroup().addTo(map),
@@ -175,6 +177,7 @@ const DisasterMap = ({
       map.remove();
       mapInstanceRef.current = null;
       baseTileLayerRef.current = null;
+      labelsTileLayerRef.current = null;
       weatherTileLayerRef.current = null;
     };
   }, []);
@@ -188,15 +191,26 @@ const DisasterMap = ({
     if (baseTileLayerRef.current) {
       map.removeLayer(baseTileLayerRef.current);
     }
+    if (labelsTileLayerRef.current) {
+      map.removeLayer(labelsTileLayerRef.current);
+      labelsTileLayerRef.current = null;
+    }
 
     const newBaseLayer = L.tileLayer(def.url, {
       attribution: def.attribution,
       subdomains: def.subdomains || "abcd",
-      maxZoom: def.maxZoom
+      maxZoom: def.maxZoom || 18
     }).addTo(map);
 
     newBaseLayer.bringToBack();
     baseTileLayerRef.current = newBaseLayer;
+
+    if (def.labelsUrl) {
+      labelsTileLayerRef.current = L.tileLayer(def.labelsUrl, {
+        maxZoom: def.maxZoom || 18,
+        pane: "tilePane"
+      }).addTo(map);
+    }
 
     if (activeConfig.weatherOverlay && activeConfig.openWeatherApiKey?.trim().length > 0) {
       if (weatherTileLayerRef.current) {
@@ -212,7 +226,7 @@ const DisasterMap = ({
     }
   }, [activeConfig]);
 
-  // Render Overlays: Polygons, Labels, Markers, Corridors, Routes
+  // Render Overlays: Polygons, Minimalist Markers, Clean Corridors, Routes
   useEffect(() => {
     if (!mapInstanceRef.current || !layerGroupsRef.current) return;
 
@@ -236,12 +250,12 @@ const DisasterMap = ({
     gVictims.clearLayers();
     gRoutes.clearLayers();
 
-    // 1. ZONES POLYGONS & LABELS
+    // 1. ZONES POLYGONS & MINIMALIST LABELS
     if (effectiveLayers.zones && zones) {
       zones.forEach((z) => {
         let strokeColor = "#10b981";
         let fillColor = "#10b981";
-        let fillOpacity = 0.14;
+        let fillOpacity = 0.12;
         let dashArray = void 0;
         let riskBadgeBg = "bg-emerald-500/20 text-emerald-300 border-emerald-500/40";
         let dotColor = "bg-emerald-400";
@@ -249,20 +263,20 @@ const DisasterMap = ({
         if (z.risk_level === "CRITICAL" || z.risk_score >= 80) {
           strokeColor = "#f43f5e";
           fillColor = "#ef4444";
-          fillOpacity = 0.25;
+          fillOpacity = 0.22;
           dashArray = "5, 5";
           riskBadgeBg = "bg-red-500/25 text-red-300 border-red-500/50";
           dotColor = "bg-red-500 animate-ping";
         } else if (z.risk_level === "HIGH" || z.risk_score >= 60) {
           strokeColor = "#f97316";
           fillColor = "#ea580c";
-          fillOpacity = 0.18;
+          fillOpacity = 0.15;
           riskBadgeBg = "bg-orange-500/20 text-orange-300 border-orange-500/40";
           dotColor = "bg-orange-400";
         } else if (z.risk_level === "MODERATE" || z.risk_score >= 40) {
           strokeColor = "#eab308";
           fillColor = "#ca8a04";
-          fillOpacity = 0.15;
+          fillOpacity = 0.12;
           riskBadgeBg = "bg-yellow-500/20 text-yellow-300 border-yellow-500/40";
           dotColor = "bg-yellow-400";
         }
@@ -270,7 +284,7 @@ const DisasterMap = ({
         // Polygon
         const poly = L.polygon(z.polygon, {
           color: strokeColor,
-          weight: z.risk_level === "CRITICAL" ? 2.5 : 2,
+          weight: z.risk_level === "CRITICAL" ? 2 : 1.5,
           fillColor,
           fillOpacity,
           dashArray,
@@ -312,21 +326,20 @@ const DisasterMap = ({
 
         gZones.addLayer(poly);
 
-        // Centroid Tactical Pill Tag
+        // Minimalist Centroid Badge (Clean & Non-overlapping)
         if (z.center && z.center.length === 2) {
           const labelIcon = L.divIcon({
-            className: "zone-centroid-tag",
+            className: "zone-clean-tag",
             html: `
-              <div class="cursor-pointer group flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#08080a]/90 border border-white/20 text-[10px] font-mono font-bold text-white shadow-xl backdrop-blur-md hover:border-white/50 hover:bg-[#121216] transition-all transform hover:scale-105">
-                <span class="w-2 h-2 rounded-full ${dotColor}"></span>
-                <span class="tracking-tight">${z.name}</span>
-                <span class="text-[9px] px-1 py-0.2 rounded font-mono border ${riskBadgeBg}">
-                  ${z.risk_score}
-                </span>
+              <div class="cursor-pointer flex items-center gap-1 px-1.5 py-0.5 rounded bg-black/75 border border-white/10 text-[9px] font-mono text-zinc-300 hover:text-white hover:border-white/30 transition-all shadow-md backdrop-blur-sm">
+                <span class="w-1.5 h-1.5 rounded-full ${dotColor}"></span>
+                <span class="font-bold">${z.id}</span>
+                <span class="text-zinc-500 font-normal">|</span>
+                <span class="text-zinc-400">${z.name.split(" ")[0]}</span>
               </div>
             `,
-            iconSize: [160, 24],
-            iconAnchor: [80, 12]
+            iconSize: [80, 20],
+            iconAnchor: [40, 10]
           });
 
           const labelMarker = L.marker(z.center, { icon: labelIcon });
@@ -351,13 +364,13 @@ const DisasterMap = ({
         if (r.status === "BLOCKED") {
           color = "#ef4444";
           dashArray = "6, 6";
-          weight = 4;
+          weight = 3.5;
           opacity = 0.95;
           statusBadge = "bg-red-500/25 text-red-300";
         } else if (r.status === "FLOODED") {
           color = "#f97316";
           dashArray = "5, 5";
-          weight = 3.5;
+          weight = 3;
           opacity = 0.85;
           statusBadge = "bg-orange-500/25 text-orange-300";
         }
@@ -388,27 +401,27 @@ const DisasterMap = ({
       });
     }
 
-    // 3. HOSPITALS (Red Cross Medical Nodes)
+    // 3. HOSPITALS (Compact Clean Red-Cross Nodes)
     if (effectiveLayers.hospitals && hospitals) {
       hospitals.forEach((h) => {
         const icon = L.divIcon({
           className: "custom-hosp-icon",
           html: `
-            <div class="relative flex flex-col items-center cursor-pointer group">
-              <div class="w-7 h-7 bg-red-950/90 border-2 border-red-500 rounded-lg flex items-center justify-center text-red-300 shadow-xl shadow-red-950/60 group-hover:scale-110 transition-transform">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4" />
-                </svg>
-              </div>
-              <div class="mt-0.5 px-1.5 py-0.2 rounded bg-black/90 border border-red-500/30 text-[8px] font-mono text-red-300 whitespace-nowrap shadow">
-                ${h.name.split(" ")[0]} (${h.available_beds} Beds)
-              </div>
+            <div class="w-5 h-5 bg-red-950/90 border border-red-500 rounded flex items-center justify-center text-red-300 shadow-lg shadow-red-950/60 cursor-pointer hover:scale-125 transition-transform">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4" />
+              </svg>
             </div>
           `,
-          iconSize: [60, 42],
-          iconAnchor: [30, 21]
+          iconSize: [20, 20],
+          iconAnchor: [10, 10]
         });
         const m = L.marker(h.coordinates, { icon });
+        m.bindTooltip(`<b>${h.name}</b><br/><span style="color:#34d399">${h.available_beds} Beds Free</span>`, {
+          className: "tactical-tooltip",
+          direction: "top",
+          offset: [0, -8]
+        });
         m.bindPopup(`
           <div class="p-2.5 text-slate-100 font-mono text-xs min-w-[220px]">
             <div class="font-bold text-sm text-red-400">${h.name}</div>
@@ -429,28 +442,28 @@ const DisasterMap = ({
       });
     }
 
-    // 4. SHELTERS (Bunkers & Evacuation Safe Havens)
+    // 4. SHELTERS (Compact Clean Emerald Bunker Nodes)
     if (effectiveLayers.shelters && shelters) {
       shelters.forEach((s) => {
         const pct = Math.round((s.occupancy / s.capacity) * 100);
         const icon = L.divIcon({
           className: "custom-shelter-icon",
           html: `
-            <div class="relative flex flex-col items-center cursor-pointer group">
-              <div class="w-7 h-7 bg-emerald-950/90 border-2 border-emerald-400 rounded-lg flex items-center justify-center text-emerald-300 shadow-xl shadow-emerald-950/60 group-hover:scale-110 transition-transform">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                </svg>
-              </div>
-              <div class="mt-0.5 px-1.5 py-0.2 rounded bg-black/90 border border-emerald-500/30 text-[8px] font-mono text-emerald-300 whitespace-nowrap shadow">
-                ${s.name.split(" ")[0]} (${pct}%)
-              </div>
+            <div class="w-5 h-5 bg-emerald-950/90 border border-emerald-400 rounded flex items-center justify-center text-emerald-300 shadow-lg shadow-emerald-950/60 cursor-pointer hover:scale-125 transition-transform">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+              </svg>
             </div>
           `,
-          iconSize: [60, 42],
-          iconAnchor: [30, 21]
+          iconSize: [20, 20],
+          iconAnchor: [10, 10]
         });
         const m = L.marker(s.coordinates, { icon });
+        m.bindTooltip(`<b>${s.name}</b><br/><span>${pct}% Occupancy</span>`, {
+          className: "tactical-tooltip",
+          direction: "top",
+          offset: [0, -8]
+        });
         m.bindPopup(`
           <div class="p-2.5 text-slate-100 font-mono text-xs min-w-[220px]">
             <div class="font-bold text-sm text-emerald-400">${s.name}</div>
@@ -463,10 +476,6 @@ const DisasterMap = ({
                 <span class="text-slate-400">Water Reserves:</span>
                 <span class="text-cyan-400 font-bold">${s.water_supply_days} days</span>
               </div>
-              <div class="flex justify-between">
-                <span class="text-slate-400">Medical Team:</span>
-                <span class="text-emerald-400 font-bold">${s.medical_team_present ? "On Site" : "Pending"}</span>
-              </div>
             </div>
           </div>
         `);
@@ -474,28 +483,28 @@ const DisasterMap = ({
       });
     }
 
-    // 5. RESCUE TEAMS FLEET (Boats / Airborne / Specialists)
+    // 5. RESCUE TEAMS FLEET (Compact Clean Cyan Boat Glyphs)
     if (effectiveLayers.teams && rescueTeams) {
       rescueTeams.forEach((t) => {
         const isAssigned = t.status === "ASSIGNED";
         const icon = L.divIcon({
           className: "custom-team-icon",
           html: `
-            <div class="relative flex flex-col items-center cursor-pointer group">
-              <div class="w-8 h-8 rounded-full ${isAssigned ? "bg-amber-950/90 border-amber-400 text-amber-300" : "bg-cyan-950/90 border-cyan-400 text-cyan-300"} border-2 flex items-center justify-center shadow-lg shadow-cyan-950/60 group-hover:scale-110 transition-transform">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                </svg>
-              </div>
-              <div class="mt-0.5 px-1.5 py-0.2 rounded bg-black/90 border ${isAssigned ? "border-amber-500/40 text-amber-300" : "border-cyan-500/40 text-cyan-300"} text-[8px] font-mono font-bold whitespace-nowrap shadow">
-                ${t.id} (${t.boats_assigned || 0} Boats)
-              </div>
+            <div class="w-6 h-6 rounded-full ${isAssigned ? "bg-amber-950/90 border-amber-400 text-amber-300" : "bg-cyan-950/90 border-cyan-400 text-cyan-300"} border flex items-center justify-center shadow-lg shadow-cyan-950/50 cursor-pointer hover:scale-125 transition-transform">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
             </div>
           `,
-          iconSize: [70, 44],
-          iconAnchor: [35, 22]
+          iconSize: [24, 24],
+          iconAnchor: [12, 12]
         });
         const m = L.marker(t.coordinates, { icon });
+        m.bindTooltip(`<b>${t.name}</b><br/><span>${t.boats_assigned || 0} Boats • ${t.status}</span>`, {
+          className: "tactical-tooltip",
+          direction: "top",
+          offset: [0, -10]
+        });
         m.bindPopup(`
           <div class="p-2.5 text-slate-100 font-mono text-xs min-w-[230px]">
             <div class="flex items-center justify-between pb-1 border-b border-white/10">
@@ -521,72 +530,60 @@ const DisasterMap = ({
       });
     }
 
-    // 6. INCIDENTS (SOS Pins with Radar Beacons)
+    // 6. INCIDENTS (Clean Tactical Radar Pins - No Bloated Text Banners)
     if (effectiveLayers.victims && incidents) {
       incidents.forEach((inc) => {
         const isP1 = inc.priority === "P1";
-        const isP2 = inc.priority === "P2";
         const isHazardOnly = inc.category === "ROAD_HAZARD" || inc.possible_victims === 0;
 
         let iconHtml = "";
 
         if (isHazardOnly) {
-          // Yellow Caution Diamond for road hazard (No confusing '0' in red circle)
+          // Compact Amber Caution Shield
           iconHtml = `
-            <div class="relative flex flex-col items-center cursor-pointer group">
-              <div class="w-6 h-6 rotate-45 rounded bg-amber-500/90 border-2 border-white flex items-center justify-center text-black shadow-lg shadow-amber-950/50 group-hover:scale-110 transition-transform">
-                <svg class="-rotate-45 w-3.5 h-3.5 text-black" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
-                </svg>
-              </div>
-              <div class="mt-1 px-1.5 py-0.2 rounded bg-black/90 border border-amber-500/40 text-[8px] font-mono font-bold text-amber-300 whitespace-nowrap shadow">
-                ROAD HAZARD
-              </div>
+            <div class="w-5 h-5 rotate-45 rounded bg-amber-500/90 border border-white flex items-center justify-center text-black shadow-md shadow-amber-950/50 cursor-pointer hover:scale-125 transition-transform">
+              <svg class="-rotate-45 w-3 h-3 text-black" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+              </svg>
             </div>
           `;
         } else if (isP1) {
-          // Critical P1: Glowing red radar ping + SOS victim count
+          // Critical P1: Clean Pulsing Beacon with Victim Count inside
           iconHtml = `
-            <div class="relative flex flex-col items-center cursor-pointer group">
-              <div class="relative flex items-center justify-center">
-                <div class="absolute -inset-3 rounded-full bg-red-500/30 radar-ping"></div>
-                <div class="absolute -inset-1 rounded-full bg-red-500/50 animate-pulse"></div>
-                <div class="relative w-8 h-8 rounded-full bg-gradient-to-br from-red-500 to-red-700 border-2 border-white flex flex-col items-center justify-center text-white font-black shadow-xl shadow-red-950/80 group-hover:scale-110 transition-transform">
-                  <span class="text-[11px] leading-none">${inc.possible_victims}</span>
-                  <span class="text-[7px] uppercase font-mono tracking-tighter leading-none opacity-90">SOS</span>
-                </div>
-              </div>
-              <div class="mt-1 px-1.5 py-0.2 rounded bg-black/90 border border-red-500/50 text-[8px] font-mono font-bold text-red-400 whitespace-nowrap shadow">
-                P1 • ${inc.possible_victims} VICTIMS
+            <div class="relative flex items-center justify-center cursor-pointer group hover:scale-110 transition-transform">
+              <div class="absolute -inset-2 rounded-full bg-red-500/35 radar-ping"></div>
+              <div class="relative w-6 h-6 rounded-full bg-gradient-to-br from-red-600 to-red-800 border border-white flex items-center justify-center text-white font-extrabold text-[10px] shadow-lg shadow-red-950/80">
+                ${inc.possible_victims}
               </div>
             </div>
           `;
         } else {
-          // P2 or other: Amber evacuation pin
+          // P2: Clean Amber Beacon with Trapped Count
           iconHtml = `
-            <div class="relative flex flex-col items-center cursor-pointer group">
-              <div class="relative flex items-center justify-center">
-                <div class="absolute -inset-1.5 rounded-full bg-amber-500/30 animate-pulse"></div>
-                <div class="relative w-7 h-7 rounded-full bg-gradient-to-br from-amber-500 to-amber-700 border-2 border-white flex flex-col items-center justify-center text-white font-bold shadow-lg shadow-amber-950/60 group-hover:scale-110 transition-transform">
-                  <span class="text-[10px] leading-none">${inc.possible_victims}</span>
-                  <span class="text-[7px] uppercase font-mono tracking-tighter leading-none opacity-90">EVAC</span>
-                </div>
-              </div>
-              <div class="mt-1 px-1.5 py-0.2 rounded bg-black/90 border border-amber-500/50 text-[8px] font-mono font-bold text-amber-300 whitespace-nowrap shadow">
-                P2 • ${inc.possible_victims} TRAPPED
+            <div class="relative flex items-center justify-center cursor-pointer group hover:scale-110 transition-transform">
+              <div class="w-5 h-5 rounded-full bg-gradient-to-br from-amber-500 to-amber-700 border border-white flex items-center justify-center text-white font-bold text-[9px] shadow-md shadow-amber-950/60">
+                ${inc.possible_victims}
               </div>
             </div>
           `;
         }
 
         const icon = L.divIcon({
-          className: "custom-incident-icon",
+          className: "clean-incident-icon",
           html: iconHtml,
-          iconSize: [80, 50],
-          iconAnchor: [40, 25]
+          iconSize: [24, 24],
+          iconAnchor: [12, 12]
         });
 
         const m = L.marker(inc.coordinates, { icon });
+
+        // Sleek Tactical Tooltip on Hover
+        m.bindTooltip(`<b>${inc.priority} ${isHazardOnly ? "ROAD HAZARD" : "SOS INCIDENT"}</b>: ${isHazardOnly ? inc.title : `${inc.possible_victims} Victims stranded (${inc.zone_name})`}`, {
+          className: "tactical-tooltip",
+          direction: "top",
+          offset: [0, -10]
+        });
+
         m.bindPopup(`
           <div class="p-3 text-slate-100 font-sans min-w-[260px]">
             <div class="flex items-center justify-between pb-2 border-b border-white/10">
@@ -626,13 +623,13 @@ const DisasterMap = ({
       });
     }
 
-    // 7. ACTIVE EXTRACTION ROUTE (Dual-layer Neon Polyline with Waypoints)
+    // 7. ACTIVE EXTRACTION ROUTE (Crisp Dual-stroke Neon Line & Clean Waypoints)
     if (effectiveLayers.routes && activeRoute && activeRoute.length > 1) {
       // Glow underlayer
       const outerGlow = L.polyline(activeRoute, {
         color: "#06b6d4",
-        weight: 9,
-        opacity: 0.35,
+        weight: 8,
+        opacity: 0.3,
         lineCap: "round",
         lineJoin: "round"
       });
@@ -640,8 +637,8 @@ const DisasterMap = ({
 
       // Crisp dashed inner line
       const innerLine = L.polyline(activeRoute, {
-        color: "#22d3ee",
-        weight: 3.5,
+        color: "#38bdf8",
+        weight: 3,
         opacity: 0.95,
         dashArray: "6, 6",
         lineCap: "round",
@@ -649,50 +646,44 @@ const DisasterMap = ({
       });
       gRoutes.addLayer(innerLine);
 
-      // Start Waypoint (NDRF Launch Base)
+      // Start Node (Launch Base)
       const startCoord = activeRoute[0];
       const startIcon = L.divIcon({
-        className: "route-start-icon",
+        className: "clean-route-start",
         html: `
-          <div class="flex flex-col items-center">
-            <div class="w-6 h-6 rounded-full bg-cyan-500 border-2 border-white flex items-center justify-center text-black font-bold shadow-lg shadow-cyan-950/80">
-              <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
-              </svg>
-            </div>
-            <div class="mt-0.5 px-1.5 py-0.2 rounded bg-black/90 border border-cyan-500/40 text-[8px] font-mono text-cyan-300 whitespace-nowrap shadow">
-              LAUNCH BASE
-            </div>
+          <div class="w-4 h-4 rounded-full bg-cyan-400 border border-white shadow-md flex items-center justify-center">
+            <span class="w-1.5 h-1.5 rounded-full bg-black"></span>
           </div>
         `,
-        iconSize: [70, 36],
-        iconAnchor: [35, 18]
+        iconSize: [16, 16],
+        iconAnchor: [8, 8]
       });
-      gRoutes.addLayer(L.marker(startCoord, { icon: startIcon }));
+      const startM = L.marker(startCoord, { icon: startIcon });
+      startM.bindTooltip("<b>Launch Base</b>: RESCUE-04 staging area", {
+        className: "tactical-tooltip",
+        direction: "top"
+      });
+      gRoutes.addLayer(startM);
 
-      // End Waypoint (Extraction Destination)
+      // End Node (Extraction Destination)
       const endCoord = activeRoute[activeRoute.length - 1];
       const endIcon = L.divIcon({
-        className: "route-end-icon",
+        className: "clean-route-end",
         html: `
-          <div class="flex flex-col items-center">
-            <div class="relative flex items-center justify-center">
-              <div class="absolute -inset-2 rounded-full bg-red-500/40 radar-ping"></div>
-              <div class="w-7 h-7 rounded-full bg-red-600 border-2 border-white flex items-center justify-center text-white font-bold shadow-lg shadow-red-950/80">
-                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                </svg>
-              </div>
-            </div>
-            <div class="mt-0.5 px-1.5 py-0.2 rounded bg-black/90 border border-red-500/50 text-[8px] font-mono font-bold text-red-300 whitespace-nowrap shadow">
-              CANAL ROUTE R-18 (~11 MIN)
-            </div>
+          <div class="relative flex items-center justify-center">
+            <div class="absolute -inset-1.5 rounded-full bg-red-500/40 radar-ping"></div>
+            <div class="w-4 h-4 rounded-full bg-red-600 border border-white shadow-md"></div>
           </div>
         `,
-        iconSize: [120, 42],
-        iconAnchor: [60, 21]
+        iconSize: [16, 16],
+        iconAnchor: [8, 8]
       });
-      gRoutes.addLayer(L.marker(endCoord, { icon: endIcon }));
+      const endM = L.marker(endCoord, { icon: endIcon });
+      endM.bindTooltip("<b>Evacuation Target</b>: Canal Route R-18 (~11 min)", {
+        className: "tactical-tooltip",
+        direction: "top"
+      });
+      gRoutes.addLayer(endM);
     }
   }, [
     zones,
@@ -715,51 +706,52 @@ const DisasterMap = ({
         className="w-full h-full rounded-xl overflow-hidden border border-white/[0.08] shadow-2xl bg-[#050505]"
       />
 
-      {/* Floating Tactical Top-Left HUD Controls & Filters */}
+      {/* Floating Tactical Top-Left HUD Controls (Clean Frosted Glass Pill Bar) */}
       {showOverlayControls && (
         <>
-          <div className="absolute top-3 left-3 z-[400] flex flex-wrap items-center gap-1.5 pointer-events-auto">
+          <div className="absolute top-3 left-3 z-[400] flex items-center gap-1.5 p-1 rounded-xl bg-[#08080a]/90 backdrop-blur-md border border-white/10 shadow-xl pointer-events-auto">
             <button
               type="button"
               onClick={handleCenterCriticalZone}
-              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-[#08080a]/90 hover:bg-[#141418] border border-red-500/40 text-red-400 hover:text-red-300 text-xs font-mono font-bold backdrop-blur-md shadow-lg transition-all cursor-pointer"
-              title="Pan directly to critical disaster zone"
+              className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg hover:bg-white/[0.08] text-red-400 hover:text-red-300 text-xs font-mono font-bold transition-all cursor-pointer"
             >
               <Crosshair className="w-3.5 h-3.5 animate-pulse" />
-              <span>TARGET ZONE 07</span>
+              <span>ZONE 07</span>
             </button>
+
+            <span className="w-px h-3 bg-white/10" />
 
             <button
               type="button"
               onClick={handleFitAll}
-              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-[#08080a]/90 hover:bg-[#141418] border border-white/10 hover:border-white/20 text-slate-300 hover:text-white text-xs font-mono backdrop-blur-md shadow-lg transition-all cursor-pointer"
-              title="Fit view to all active sectors"
+              className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg hover:bg-white/[0.08] text-slate-300 hover:text-white text-xs font-mono transition-all cursor-pointer"
             >
               <Maximize2 className="w-3.5 h-3.5" />
               <span>FIT ALL</span>
             </button>
 
+            <span className="w-px h-3 bg-white/10" />
+
             <button
               type="button"
               onClick={handleToggleBasemap}
-              className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border text-xs font-mono backdrop-blur-md shadow-lg transition-all cursor-pointer ${
+              className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-mono transition-all cursor-pointer ${
                 isSatellite
-                  ? "bg-cyan-950/80 border-cyan-400 text-cyan-300"
-                  : "bg-[#08080a]/90 border-white/10 hover:border-white/20 text-slate-300 hover:text-white"
+                  ? "bg-cyan-950/70 border border-cyan-500/40 text-cyan-300"
+                  : "hover:bg-white/[0.08] text-slate-300 hover:text-white"
               }`}
-              title="Switch between Carto Dark Matter and High-Res Satellite"
             >
               <Globe className="w-3.5 h-3.5" />
-              <span>{isSatellite ? "SATELLITE ACTIVE" : "DARK MATTER"}</span>
+              <span>{isSatellite ? "SATELLITE" : "DARK CANVAS"}</span>
             </button>
           </div>
 
           {/* Floating Tactical Layer Filter Pills (Top Center / Right) */}
-          <div className="absolute top-3 right-14 z-[400] hidden sm:flex items-center gap-1 p-1 rounded-lg bg-[#08080a]/90 backdrop-blur-md border border-white/10 text-[11px] font-mono text-slate-300 shadow-xl pointer-events-auto">
+          <div className="absolute top-3 right-14 z-[400] hidden sm:flex items-center gap-1 p-1 rounded-xl bg-[#08080a]/90 backdrop-blur-md border border-white/10 text-[11px] font-mono text-slate-300 shadow-xl pointer-events-auto">
             <button
               type="button"
               onClick={() => toggleLayer("zones")}
-              className={`px-2 py-1 rounded transition-colors ${
+              className={`px-2 py-1 rounded-lg transition-colors cursor-pointer ${
                 effectiveLayers.zones ? "bg-white/10 text-white font-bold" : "text-slate-500 hover:text-slate-300"
               }`}
             >
@@ -768,7 +760,7 @@ const DisasterMap = ({
             <button
               type="button"
               onClick={() => toggleLayer("victims")}
-              className={`px-2 py-1 rounded transition-colors ${
+              className={`px-2 py-1 rounded-lg transition-colors cursor-pointer ${
                 effectiveLayers.victims ? "bg-red-500/20 text-red-300 font-bold" : "text-slate-500 hover:text-slate-300"
               }`}
             >
@@ -777,7 +769,7 @@ const DisasterMap = ({
             <button
               type="button"
               onClick={() => toggleLayer("teams")}
-              className={`px-2 py-1 rounded transition-colors ${
+              className={`px-2 py-1 rounded-lg transition-colors cursor-pointer ${
                 effectiveLayers.teams ? "bg-cyan-500/20 text-cyan-300 font-bold" : "text-slate-500 hover:text-slate-300"
               }`}
             >
@@ -786,7 +778,7 @@ const DisasterMap = ({
             <button
               type="button"
               onClick={() => toggleLayer("roads")}
-              className={`px-2 py-1 rounded transition-colors ${
+              className={`px-2 py-1 rounded-lg transition-colors cursor-pointer ${
                 effectiveLayers.roads ? "bg-amber-500/20 text-amber-300 font-bold" : "text-slate-500 hover:text-slate-300"
               }`}
             >
@@ -795,7 +787,7 @@ const DisasterMap = ({
             <button
               type="button"
               onClick={() => toggleLayer("hospitals")}
-              className={`px-2 py-1 rounded transition-colors ${
+              className={`px-2 py-1 rounded-lg transition-colors cursor-pointer ${
                 effectiveLayers.hospitals ? "bg-red-500/20 text-red-300 font-bold" : "text-slate-500 hover:text-slate-300"
               }`}
             >
@@ -804,7 +796,7 @@ const DisasterMap = ({
             <button
               type="button"
               onClick={() => toggleLayer("shelters")}
-              className={`px-2 py-1 rounded transition-colors ${
+              className={`px-2 py-1 rounded-lg transition-colors cursor-pointer ${
                 effectiveLayers.shelters ? "bg-emerald-500/20 text-emerald-300 font-bold" : "text-slate-500 hover:text-slate-300"
               }`}
             >
@@ -850,7 +842,7 @@ const DisasterMap = ({
               </div>
               <div className="flex items-center gap-1.5">
                 <span className="w-3 h-0.5 bg-cyan-400" />
-                <span>Canal Route R-18</span>
+                <span>Canal Route</span>
               </div>
               <div className="flex items-center gap-1.5">
                 <span className="w-3 h-0.5 bg-red-500 border-dashed" />
