@@ -1,0 +1,37 @@
+[
+  {
+    "id": "SOP-FLD-01",
+    "title": "NDMA Standard Operating Procedure for Flood Water Evacuation & Rooftop Rescues",
+    "category": "EVACUATION",
+    "source": "NDMA National Flood Management Guidelines (Rev. 2024), Section 4.2",
+    "content": "When victims are stranded on rooftops or elevated structures in high flood velocity (>1.5 m/s) or water depths exceeding 2.0 meters, standard road ambulances and wheeled carriers are prohibited. Responding units must deploy rigid inflatable motorized boats (RIBs) with outboard motors (minimum 25-40 HP) or amphibious carriers. Personnel must wear Level III personal flotation devices (PFD) and carry throw-lines. If access roads are blocked or scoured, rescue convoys must revert to secondary navigable water corridors or request Indian Coast Guard / Air Force winch hauler assistance. Never exceed rated boat weight limits; prioritize hypothermic, pediatric, and elderly victims first."
+  },
+  {
+    "id": "SOP-TRG-02",
+    "title": "Emergency Medical Triage Protocol in Inundated Zones (START Protocol)",
+    "category": "MEDICAL",
+    "source": "Disaster Medicine Handbook, Ministry of Health & Family Welfare, Guidelines Sec 7",
+    "content": "In mass casualty flood environments, triage adheres to the Simple Triage and Rapid Treatment (START) framework: Red (Immediate/P1) for victims with airway compromise, severe hypothermia, or internal trauma requiring transfer to a Level 1 Trauma Center within 60 minutes. Yellow (Delayed/P2) for non-ambulatory fractures or stable deep lacerations. Green (Minor/P3) for walking wounded to be routed to designated multipurpose shelters with first-aid centers. Black (Deceased/P4). In case of cut-off roads, SCB Medical College and AIIMS Bhubaneswar must be informed via satellite telemetry to pre-stage critical trauma beds."
+  },
+  {
+    "id": "SOP-SHT-03",
+    "title": "Shelter Hygiene, Potable Water & Communicable Disease Control Protocol",
+    "category": "SHELTERS",
+    "source": "SPHERE Humanitarian Standards & Odisha State Disaster Management Authority (OSDMA)",
+    "content": "Designated cyclone and flood shelters must maintain minimum 3.5 square meters per occupant, daily potable water distribution of 15 liters per person per day, separate sanitation facilities for women, and oral rehydration salt (ORS) / water chlorination tablet depots. If shelter occupancy exceeds 85%, automated relief reallocation alerts trigger to redirect arriving evacuees to adjacent secondary centers before water reserves deplete below a 72-hour threshold."
+  },
+  {
+    "id": "SOP-ROU-04",
+    "title": "Emergency Vehicle Access & Road Submersion Clearance Protocol",
+    "category": "ROUTING",
+    "source": "Indian Roads Congress (IRC:SP:106) Guidelines for Flood-Resilient Highway Operations",
+    "content": "Paved roads with water depth greater than 0.3 meters (12 inches) are deemed hazardous for standard civilian vehicles and two-wheel drive ambulances due to lateral hydroplaning forces. High-clearance four-wheel-drive military rescue vehicles may transit depths up to 0.6 meters at maximum 10 km/h. Any road exhibiting structural scouring, culvert washout, or current velocity exceeding 1.0 m/s must be marked BLOCKED immediately. Route optimizers must compute detours through higher-elevation state corridors even if distance is 40% longer."
+  },
+  {
+    "id": "SOP-HITL-05",
+    "title": "Human-in-the-Loop Operational Mandate for Autonomous Emergency Decisions",
+    "category": "COMMAND_CONTROL",
+    "source": "National Incident Management System (NIMS) Executive Directive on Decision Support Systems",
+    "content": "Automated algorithms, spatial optimizers, and computer vision models serve solely as advisory decision-support mechanisms. No real-world resource reallocation, emergency team dispatch, or evacuation order may be executed autonomously by artificial intelligence without explicit human authorization from the Emergency Operations Center (EOC) Incident Commander. Every recommendation must display transparent reasoning, risk score factors, and confidence parameters."
+  }
+]
