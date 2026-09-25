@@ -1,11 +1,14 @@
 const STORAGE_KEY = "disasteriq_gis_map_config";
+
 const DEFAULT_MAP_CONFIG = {
   provider: "carto_dark",
+  cartoApiKey: import.meta.env.VITE_CARTO_API_KEY || "",
   mapboxToken: import.meta.env.VITE_MAPBOX_TOKEN || "",
   googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY || "",
   openWeatherApiKey: import.meta.env.VITE_OPENWEATHER_API_KEY || "",
   weatherOverlay: false
 };
+
 const getMapConfig = () => {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
@@ -14,7 +17,7 @@ const getMapConfig = () => {
       return {
         ...DEFAULT_MAP_CONFIG,
         ...parsed,
-        // Preserve env fallback if empty in storage
+        cartoApiKey: parsed.cartoApiKey || import.meta.env.VITE_CARTO_API_KEY || "",
         mapboxToken: parsed.mapboxToken || import.meta.env.VITE_MAPBOX_TOKEN || "",
         googleMapsApiKey: parsed.googleMapsApiKey || import.meta.env.VITE_GOOGLE_MAPS_API_KEY || "",
         openWeatherApiKey: parsed.openWeatherApiKey || import.meta.env.VITE_OPENWEATHER_API_KEY || ""
@@ -25,6 +28,7 @@ const getMapConfig = () => {
   }
   return { ...DEFAULT_MAP_CONFIG };
 };
+
 const saveMapConfig = (updates) => {
   const current = getMapConfig();
   const updated = { ...current, ...updates };
@@ -36,6 +40,7 @@ const saveMapConfig = (updates) => {
   }
   return updated;
 };
+
 const subscribeMapConfig = (callback) => {
   const handler = (e) => {
     const customEvent = e;
@@ -48,8 +53,10 @@ const subscribeMapConfig = (callback) => {
     window.removeEventListener("disasteriq_map_config_updated", handler);
   };
 };
+
 const getTileLayerDefinition = (config) => {
-  const { provider, mapboxToken, googleMapsApiKey } = config;
+  const { provider, cartoApiKey, mapboxToken, googleMapsApiKey } = config;
+
   switch (provider) {
     case "mapbox_dark":
       if (mapboxToken && mapboxToken.trim().length > 0) {
@@ -63,6 +70,7 @@ const getTileLayerDefinition = (config) => {
         };
       }
       break;
+
     case "mapbox_satellite":
       if (mapboxToken && mapboxToken.trim().length > 0) {
         return {
@@ -75,6 +83,7 @@ const getTileLayerDefinition = (config) => {
         };
       }
       break;
+
     case "google_hybrid":
       if (googleMapsApiKey && googleMapsApiKey.trim().length > 0) {
         return {
@@ -87,6 +96,7 @@ const getTileLayerDefinition = (config) => {
         };
       }
       break;
+
     case "google_roadmap":
       if (googleMapsApiKey && googleMapsApiKey.trim().length > 0) {
         return {
@@ -99,20 +109,63 @@ const getTileLayerDefinition = (config) => {
         };
       }
       break;
+
+    case "esri_satellite":
+      return {
+        url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+        attribution: "&copy; Esri &copy; Maxar, Earthstar Geographics",
+        maxZoom: 18,
+        requiresKey: false,
+        hasKey: true,
+        providerName: "Esri World Satellite (Zero-Key Active)"
+      };
+
+    case "osm":
+      return {
+        url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+        attribution: "&copy; OpenStreetMap contributors",
+        subdomains: "abc",
+        maxZoom: 19,
+        requiresKey: false,
+        hasKey: true,
+        providerName: "OpenStreetMap Standard (Zero-Key Active)"
+      };
+
     case "carto_dark":
     default:
-      break;
+      if (cartoApiKey && cartoApiKey.trim().length > 0) {
+        return {
+          url: `https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png?api_key=${cartoApiKey.trim()}`,
+          attribution: "&copy; OpenStreetMap contributors &copy; CARTO",
+          subdomains: "abcd",
+          maxZoom: 19,
+          requiresKey: true,
+          hasKey: true,
+          providerName: "CartoDB Dark Matter (API Key Active)"
+        };
+      }
+      // If no CARTO key, serve Esri Dark Canvas for a watermark-free dark tactical experience
+      return {
+        url: "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}",
+        attribution: "&copy; Esri &copy; HERE, OpenStreetMap contributors",
+        maxZoom: 16,
+        requiresKey: false,
+        hasKey: true,
+        providerName: "Esri Tactical Dark Canvas (Zero-Key Clean)"
+      };
   }
+
+  // Fallback
   return {
-    url: "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
-    attribution: "&copy; OpenStreetMap contributors &copy; CARTO",
-    subdomains: "abcd",
-    maxZoom: 19,
+    url: "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}",
+    attribution: "&copy; Esri &copy; HERE, OpenStreetMap contributors",
+    maxZoom: 16,
     requiresKey: false,
     hasKey: true,
-    providerName: "CartoDB Dark Matter (Zero-Key Active)"
+    providerName: "Esri Tactical Dark Canvas (Zero-Key Clean)"
   };
 };
+
 export {
   DEFAULT_MAP_CONFIG,
   getMapConfig,
