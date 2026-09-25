@@ -27,6 +27,7 @@ const api = {
         shelters: fallbackData.shelters || [],
         hospitals: fallbackData.hospitals || [],
         ambulances: fallbackData.ambulances || [],
+        roads: fallbackData.roads || [],
         active_missions: [
           {
             id: "MIS-801",

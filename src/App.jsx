@@ -245,6 +245,10 @@ function App() {
               <MapPage
                 zones={summary.zones}
                 incidents={summary.recent_incidents}
+                roads={summary.roads || []}
+                hospitals={summary.hospitals || []}
+                shelters={summary.shelters || []}
+                rescueTeams={summary.rescue_teams || []}
               />
             )}
 

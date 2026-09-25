@@ -257,6 +257,10 @@ const DashboardPage = ({
             <DisasterMap
               zones={summary.zones}
               incidents={summary.recent_incidents}
+              roads={summary.roads || []}
+              hospitals={summary.hospitals || []}
+              shelters={summary.shelters || []}
+              rescueTeams={summary.rescue_teams || []}
               activeRoute={[
                 [20.28, 86.2],
                 [20.24, 86.28],

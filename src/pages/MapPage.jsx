@@ -122,6 +122,8 @@ const MapPage = ({
             onSelectZone={(z) => setSelectedZone(z)}
             layers={layers}
             mapConfig={mapConfig}
+            showOverlayControls={false}
+            showLegend={false}
           />
 
           {/* Floating Top Left Controls */}

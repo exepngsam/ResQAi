@@ -133,36 +133,26 @@ const getTileLayerDefinition = (config) => {
 
     case "carto_dark":
     default:
-      if (cartoApiKey && cartoApiKey.trim().length > 0) {
-        return {
-          url: `https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png?api_key=${cartoApiKey.trim()}`,
-          attribution: "&copy; OpenStreetMap contributors &copy; CARTO",
-          subdomains: "abcd",
-          maxZoom: 19,
-          requiresKey: true,
-          hasKey: true,
-          providerName: "CartoDB Dark Matter (API Key Active)"
-        };
-      }
-      // If no CARTO key, serve Esri Dark Canvas for a watermark-free dark tactical experience
       return {
-        url: "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}",
-        attribution: "&copy; Esri &copy; HERE, OpenStreetMap contributors",
-        maxZoom: 16,
+        url: "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
+        attribution: "&copy; OpenStreetMap contributors &copy; CARTO",
+        subdomains: "abcd",
+        maxZoom: 19,
         requiresKey: false,
         hasKey: true,
-        providerName: "Esri Tactical Dark Canvas (Zero-Key Clean)"
+        providerName: "CartoDB Dark Matter (Zero-Key Active)"
       };
   }
 
   // Fallback
   return {
-    url: "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}",
-    attribution: "&copy; Esri &copy; HERE, OpenStreetMap contributors",
-    maxZoom: 16,
+    url: "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
+    attribution: "&copy; OpenStreetMap contributors &copy; CARTO",
+    subdomains: "abcd",
+    maxZoom: 19,
     requiresKey: false,
     hasKey: true,
-    providerName: "Esri Tactical Dark Canvas (Zero-Key Clean)"
+    providerName: "CartoDB Dark Matter (Zero-Key Active)"
   };
 };
 
